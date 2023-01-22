@@ -4,6 +4,8 @@
 
 ## Motivation
 
+For me to learn how a large editor like emacs works by writing something similar myself. Secondary motivations include: Producing readable source that other's can study and learn from, producing an editor that I might actual want to use.
+
 ## Assumptions
 
 ## References
