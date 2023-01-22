@@ -14,3 +14,4 @@ For me to learn how a large editor like emacs works by writing something similar
 ## References
 
 - [Other Emacs Implementations](http://www.finseth.com/emacs.html)
+- [Emacs Source](https://github.com/emacs-mirror/emacs) and [my notes as I read the source](emacs-notes.org)

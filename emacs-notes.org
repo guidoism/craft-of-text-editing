@@ -1,0 +1,63 @@
+
+** Emacs startup process
+
+- [ ] Find location of main() function
+
+=startup.el=: Parses the command line and gets Emacs running.
+
+=loadup.el=: Loaded into a bare Emacs to make a dumpable one. What I
+think that means is that this is where the actual loading of the
+emacs editor stuff into the elisp interpreter happens.
+
+The following files are all the important ones from loadup.el in the
+order they are loaded.
+
+=subr.el=: Basic lisp subroutines for Emacs. This is one of the first
+files loaded by loadup.el. The functions here are all for convenience
+in writing lisp.
+
+=keymap.el=: Keymap functions. This library deals with the "new"
+keymap binding interface: The only key syntax allowed by these
+functions is the `kbd' one.
+
+=widget.el=: A library of user interface components. The widget
+library is partially documented in the "widget" Info file (C-h i).
+This file only contains the code needed to define new widget types.
+Everything else is autoloaded from =wid-edit.el=.
+
+=format.el=: Read and save files in multiple formats. Defines a
+unified mechanism for saving & loading files stored in different
+formats.
+
+=bindings.el=: Define standard key bindings and some variables. This
+is also where the various mode-lines are defined. Take a look at the
+function =right-char= for an example of basic movement. In its most
+basic configuration (non-visual left-to-right mode) it just calls
+=forward-char=. This function isn't defined in this file but I can
+type =M-x apropos RET forward-char= and get the location of the
+definition. The docs say: "forward-char is an interactive built-in
+function in ‘src/cmds.c’" In that C file it's a DEFUN macro that just
+calls move_point which is a C function that either moves the point
+forward or backward in the buffer. It also deals with hitting the
+beginning or end of the buffer. =forward-line= is also defined in the
+C file but I'm not sure how it gets from =next-line= in the lisp file
+to there.
+
+
+
+** How to build
+
+#+begin_src sh
+./autogen.sh 
+mkdir build && cd build
+../configure --without-all --without-ns --without-x
+make
+#+end_src
+
+Configure took 33s and the build took 5m23s.
+
+Part of the building process is to run emacs in bootstrap mode and
+dump out the state resulting from that to improve the startup speed.
+Therefore, a simpler Emacs could probably be gotten without going
+through that process.
+
