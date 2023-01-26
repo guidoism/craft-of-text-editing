@@ -1,7 +1,7 @@
 
 ** Emacs startup process
 
-The main() function is in =emacs.c=.
+The =main()= function is in =emacs.c= and initialization starts around line 1884.
 
 =loadup.el=: Loaded into a bare Emacs to make a dumpable one. What I
 think that means is that this is where the actual loading of the
