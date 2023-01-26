@@ -1,7 +1,7 @@
 
 ** Emacs startup process
 
-- [ ] Find location of main() function
+The main() function is in =emacs.c=.
 
 =loadup.el=: Loaded into a bare Emacs to make a dumpable one. What I
 think that means is that this is where the actual loading of the
