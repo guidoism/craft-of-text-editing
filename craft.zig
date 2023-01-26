@@ -1,35 +1,26 @@
 const std = @import("std");
 
 const Buffer = struct {
-    name: [64]u8,
+    name: [64]u8 = undefined,
     contents: std.ArrayList(u21),
-    point: u32,
+    point: u32 = 0,
 };
 
-fn CircularList(comptime T: type) type {
-    return struct {
-        pub const Node = struct {
-            prev: ?*Node,
-            next: ?*Node,
-            data: T,
-        };
+const World = std.ArrayList(Buffer);
 
-        first: ?*Node,
-        last:  ?*Node,
-        len:   usize,
-    };
-}
-
-const World = struct {
-    chain: CircularList(Buffer),
-    current: ?*CircularList(Buffer).Node,
+const Window = struct {
+    buffer: *Buffer,
+    height: u16,
+    width:  u16,
 };
-
-var world = World();
 
 pub fn main() !void {
-    const stdout = std.io.getStdOut().writer();
-    try stdout.print("Hello, {s}!\n", .{"world"});
+    //const stdout = std.io.getStdOut().writer();
+    //try stdout.print("Hello, {s}!\n", .{"world"});
+    
+    var world = World;
+    var b = world.addOne();
+    b.contents.appendSlice("guido");
 }
 
 
