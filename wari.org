@@ -1,0 +1,44 @@
+* Plan
+
+1. Convert one-dimensional ascii buffer to (effectively)
+   two-dimensional screen buffer. No editing of text. No scrolling. No
+   multibyte characters.
+2. Add scrolling
+3. Append-only editing   
+
+* Barely even a text editor
+
+We will start off with something that sort of looks like a text editor
+but could barely even be called that. It will display at most a
+screenfull of text from a fixed UTF-8 array. The only editing will
+be to append until the array is full. There is no cursor following
+so if you inadvertantly type a bunch of newlines you won't see updates
+past that.
+
+The output in this case is a 80x25 buffer.
+
+#+begin_src zig
+var buffer = [1024]u8;
+var screen = [80*25]u8;
+
+var i: u32 = 0; // index into buffer
+var j: u32 = 0; // index into screen buffer
+var col: u8 = 0;
+while (i < screen.len && j < buffer.len) : (i += 1) {
+    if (c == '\n') { // fill the rest of column with spaces
+        // TODO: what we really want here is for the buffer to keep pumping out
+        // spaces until the end of the columns so we can continue working our
+        // way naturally through the screen buffer. So, we don't update j while
+        // we are doing this.
+    }
+}
+
+
+var i: u16 = 0; // column
+var j: u16 = 0; // row
+var k: u16 = 0; // index into screen buffer
+for (buffer) |c| {
+    screen[k] = c;
+}
+#+end_src
+

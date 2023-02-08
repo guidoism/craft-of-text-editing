@@ -1,0 +1,49 @@
+In this one we are basically just doing exactly what The Craft of Text
+Editing says to do, in that order.
+
+** Buffers (and the World)
+
+#+begin_src zig
+const World = struct {
+    buffer_chain: ?*Buffer,
+    current_buffer: ?*Buffer,
+};
+var world = World{};
+
+const Buffer = struct {
+    next_chain_entry: ?*Buffer,
+    buffer_name: [BUFFERNAMEMAX]u8,
+
+    point: Location,
+    cur_line: u32,
+    num_chars: u32,
+    num_lines: u32,
+
+    mark_list: ?*Mark,
+    contents: ?*Storage,
+
+    file_name: [FILENAMEMAX]u8,
+    file_time: Time,
+    is_modified: bool,
+
+    mode_list: ?*Mode,
+};
+
+const Location = struct {
+    i: u32 = 0,
+};
+
+const Mark = struct {
+    next_mark: ?*Mark,
+    name: ?*MarkName,
+    where_it_is: Location,
+    is_fixed: bool,
+};
+
+const Mode = struct {
+    next_mode: ?*Mode,
+    mode_name: [MODENAMEMAX]u8,
+    add_proc: *const fn () Status;
+};
+
+#+end_src
