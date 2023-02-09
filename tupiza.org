@@ -10,14 +10,17 @@ const FileNameMax = 64;
 const BufferNameMax = 64;
 const ModeNameMax = 64;
 
-const Status = struct {
+const Status = enum {
+    ok,
+    failed,
 };
 
 const World = struct {
     buffer_chain: ?*Buffer,
     current_buffer: ?*Buffer,
 
-    fn init() Status {
+    pub fn init() Status {
+        return Status.ok;
     }
 
     fn fini() Status {
@@ -102,7 +105,7 @@ const MarkName = struct {};
 const Time = struct {};
 
 pub fn main() void {
-    var status = world.init();
+    var status = World.init();
     _ = status;
 }
 
