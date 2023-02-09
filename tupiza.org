@@ -3,9 +3,15 @@ Editing says to do, in that order.
 
 ** Buffers (and the World)
 
-#+begin_src zig
-FileNameMax
-BufferNameMax
+#+begin_src zig :tangle build/editor.zig
+const std = @import("std");
+
+const FileNameMax = 64; 
+const BufferNameMax = 64;
+const ModeNameMax = 64;
+
+const Status = struct {
+};
 
 const World = struct {
     buffer_chain: ?*Buffer,
@@ -17,10 +23,12 @@ const World = struct {
     fn fini() Status {
     }
 
-    fn save(file_name: []u8) Status {
+    fn save(filename: []u8) Status {
+        std.debug.print("TODO: {}\n", .{filename});
     }
 
-    fn load(file_name: []u8) Status {
+    fn load(filename: []u8) Status {
+        std.debug.print("TODO: {}\n", .{filename});
     }
 };
 var world = World{};
@@ -43,25 +51,30 @@ const Buffer = struct {
 
     mode_list: ?*Mode,
 
-    fn create(buffer_name: []u8) Status {
+    fn create(name: []u8) Status {
+        std.debug.print("TODO: {}\n", .{name});
     }
     
-    fn clear(buffer_name: []u8) Status {
+    fn clear(name: []u8) Status {
+        std.debug.print("TODO: {}\n", .{name});
     }
     
-    fn delete(buffer_name: []u8) Status {
+    fn delete(name: []u8) Status {
+        std.debug.print("TODO: {}\n", .{name});
     }
     
-    fn setCurrent(buffer_name: u[]u8_name) Status {
+    fn setCurrent(name: []u8) Status {
+        std.debug.print("TODO: {}\n", .{name});
     }
     
-    fn Buffer_Set_Next() []u8 {
+    fn setNext() []u8 {
     }
     
-    fn setName(buffer_name: []u8_name) Status {
+    fn setName(name: []u8) Status {
+        std.debug.print("TODO: {}\n", .{name});
     }
     
-    fn Buffer_Get_Name() []u8 {
+    fn getName() []u8 {
     }
     
 };
@@ -79,10 +92,12 @@ const Mark = struct {
 
 const Mode = struct {
     next_mode: ?*Mode,
-    mode_name: [MODENAMEMAX]u8,
-    add_proc: *const fn () Status;
+    mode_name: [ModeNameMax]u8,
+    add_proc: *const fn () Status,
 };
 
-
+const Storage = struct {};
+const MarkName = struct {};
+const Time = struct {};
 
 #+end_src
