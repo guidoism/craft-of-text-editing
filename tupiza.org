@@ -100,4 +100,7 @@ const Storage = struct {};
 const MarkName = struct {};
 const Time = struct {};
 
+pub fn main() void {
+}
+
 #+end_src
