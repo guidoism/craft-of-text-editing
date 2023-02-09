@@ -31,7 +31,8 @@ const World = struct {
         std.debug.print("TODO: {}\n", .{filename});
     }
 };
-var world = World{};
+
+var world = World{.buffer_chain=undefined, .current_buffer=undefined};
 
 const Buffer = struct {
     next_chain_entry: ?*Buffer,
@@ -101,6 +102,8 @@ const MarkName = struct {};
 const Time = struct {};
 
 pub fn main() void {
+    var status = world.init();
+    _ = status;
 }
 
 #+end_src
