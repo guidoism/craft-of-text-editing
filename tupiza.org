@@ -20,6 +20,8 @@ const World = struct {
     current_buffer: ?*Buffer,
 
     pub fn init() Status {
+        _ = Buffer.create("*scratch*");
+        //world.current_buffer = 
         return Status.ok;
     }
 
@@ -38,25 +40,27 @@ const World = struct {
 var world = World{.buffer_chain=undefined, .current_buffer=undefined};
 
 const Buffer = struct {
-    next_chain_entry: ?*Buffer,
-    buffer_name: [BufferNameMax]u8,
+    next_chain_entry: ?*Buffer = undefined,
+    name: [BufferNameMax]u8 = undefined,
 
     point: Location,
-    cur_line: u32,
-    num_chars: u32,
-    num_lines: u32,
+    cur_line: u32 = 0,
+    num_chars: u32 = 0,
+    num_lines: u32 = 0,
 
-    mark_list: ?*Mark,
-    contents: ?*Storage,
+    mark_list: ?*Mark = undefined,
+    contents: ?*Storage = undefined,
 
-    file_name: [FileNameMax]u8,
-    file_time: Time,
-    is_modified: bool,
+    file_name: [FileNameMax]u8 = undefined,
+    file_time: Time = undefined,
+    is_modified: bool = false,
 
-    mode_list: ?*Mode,
+    mode_list: ?*Mode = undefined,
 
-    fn create(name: []u8) Status {
-        std.debug.print("TODO: {}\n", .{name});
+    fn create(name: []const u8) Status {
+        var buf = Buffer{.point=Location{}};
+        std.mem.copy(buf.name, name);
+        return Status.ok;
     }
     
     fn clear(name: []u8) Status {
