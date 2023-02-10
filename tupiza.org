@@ -59,7 +59,7 @@ const Buffer = struct {
 
     fn create(name: []const u8) Status {
         var buf = Buffer{.point=Location{}};
-        std.mem.copy(u8, buf.name, name);
+        std.mem.copy(u8, &buf.name, name);
         return Status.ok;
     }
     
