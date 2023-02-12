@@ -1,0 +1,6 @@
+What if we used Context as the layout engine.
+
+#+begin_src context
+\definepapersize[iPadAir4][width=22.7cm,height=15.8cm] % 59:41 aspect ratio, 2360×1640, 276.9mm diagonal
+
+#+end_src

@@ -3,7 +3,7 @@ Editing says to do, in that order.
 
 ** Buffers (and the World)
 
-#+begin_src zig :tangle build/editor.zig
+#+begin_src zig :tangle build/editor.zig :noweb yes
 const std = @import("std");
 
 const FileNameMax = 64; 
@@ -15,13 +15,17 @@ const Status = enum {
     failed,
 };
 
+const Error = error{
+    failed,
+};
+
 const World = struct {
     buffer_chain: ?*Buffer,
     current_buffer: ?*Buffer,
 
     pub fn init() Status {
         _ = Buffer.create("*scratch*");
-        //world.current_buffer = 
+        //Buffer.setCurrent("*scratch*");
         return Status.ok;
     }
 
@@ -40,10 +44,12 @@ const World = struct {
 var world = World{.buffer_chain=undefined, .current_buffer=undefined};
 
 const Buffer = struct {
+    const Self = @This();
+    
     next_chain_entry: ?*Buffer = undefined,
     name: [BufferNameMax]u8 = undefined,
 
-    point: Location,
+    point: Location = {},
     cur_line: u32 = 0,
     num_chars: u32 = 0,
     num_lines: u32 = 0,
@@ -57,10 +63,18 @@ const Buffer = struct {
 
     mode_list: ?*Mode = undefined,
 
-    fn create(name: []const u8) Status {
-        var buf = Buffer{.point=Location{}};
+    fn create(name: []const u8) Error!Buffer {
+        // TODO: confirm that no buffer already has this name
+        var buf = Buffer{};
         std.mem.copy(u8, &buf.name, name);
-        return Status.ok;
+        // TODO: create a Storage for contents
+        // TODO: add to world?
+        return buf;
+    }
+    
+    fn insertChar(self: Self, c: u8) Status {
+        self.context[self.point] = c;
+        //advance(b.point);
     }
     
     fn clear(name: []u8) Status {
@@ -84,7 +98,7 @@ const Buffer = struct {
     
     fn getName() []u8 {
     }
-    
+
 };
 
 const Location = struct {
@@ -108,9 +122,41 @@ const Storage = struct {};
 const MarkName = struct {};
 const Time = struct {};
 
-pub fn main() void {
-    var status = World.init();
-    _ = status;
-}
-
+<<buffergap>>
+<<main>>    
 #+end_src
+
+
+** Buffer Gap
+
+1. User coordinate system
+2. Gap coordinate system
+3. Storage coordinate system
+
+Coordinate positions for 1 and 2 always refer to the space /in
+between/ the characters. It makes the math easier. We keep track of
+the position where the gap starts and the the position where the gap
+ends.
+
+#+name: buffergap
+#+begin_src zig
+const BufferGap = struct {
+    
+};
+#+end_src
+
+
+#+name: main
+#+begin_src zig
+pub fn main() void {
+    //_ = World.init();
+    //var b = world.current_buffer;
+    //b.insertChar('v');
+    //Buffer.insertChar(b.*, 'v');
+    var b = Buffer.create("*scratch*");
+    b.insertChar('v');
+}
+#+end_src
+
+
+

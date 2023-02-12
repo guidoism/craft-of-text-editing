@@ -17,3 +17,5 @@ For me to learn how a large editor like emacs works by writing something similar
 - [Emacs Source](https://github.com/emacs-mirror/emacs) and [my notes as I read the source](emacs-notes.org)
 - [Awesome Emacs](https://github.com/emacs-tw/awesome-emacs)
 - [Sequence of Actions at Startup](https://www.gnu.org/software/emacs/manual/html_node/elisp/Startup-Summary.html)
+- [Build Your Own Text Editor](https://viewsourcecode.org/snaptoken/kilo/) - A tour of [Kilo](https://github.com/antirez/kilo/blob/master/kilo.c) in 184 steps
+
