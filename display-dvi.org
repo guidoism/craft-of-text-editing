@@ -1,0 +1,197 @@
+** A Modern DVI for displays
+
+- Like DVI in that the code for printing a character at the current
+  position is just the character code, but we use UTF-8 instead of
+  ASCII.
+- Concept of layers using alpha and clipping of different pages
+- Font glyphs can be included
+
+*** One-pager
+
+**** Motivation
+
+I want my phone, tablet, and computer to instantaneously display
+the text-heavy webpages I regularly read. And I want them to use
+tiny amount of cpu and battery.
+
+HTML/CSS and PDF are resource-intensive ways to precisely describe
+what we want printed on a text-oriented screen. HTML/CSS are so
+complex that there are only a handful of actively maintained engines
+and none could be described as "lightweight". Despite outside
+appearences, the commonly used subset of PDF isn't particularly
+complex. But it's not particularly useful to describe a screen that
+can be updated (are we sure about this point, see open question).
+
+**** Assumptions
+
+- Our primary use is for text-heavy documents to be read on a screen
+  and optionally printed
+- Photographs and video are explicitly not directly supported, but
+  seperate media streams can be referenced and positioned
+- We want to include semantic information to enable copy/paste and screen readers
+- We want to minimize the latency from first byte received to being able to display
+  the first screenful of text
+- We want to minimize the battery drain during parsing and display
+- We explicitely don't care about infinitely adjustable text-reflowing
+  based on screen width (better to define a few common screen widths)
+
+**** Open Questions
+
+- Are we absolutely sure that PDF wouldn't work well as a multi-layer screen descrition language?
+
+**** Existing Solutions
+
+- DVI is a series of bytes where the first 128 positions are commands
+  for printing their glyphs and advancing to the right and the
+  remaining 128 positions are command for drawing simple shapes,
+  moving the reference point around, and setting up state.
+- DVI doesn't have a concept of layers
+- DVI doesn't maintain semantic markup information for copy/paste
+- Display Postscript
+
+**** Potential Solutions
+
+- Reuse DVI or PDF formats but assign different semantics to different pages to achieve my goals
+
+**** References
+
+- [[https://en.wikipedia.org/wiki/Comparison_of_browser_engines][Wikipedia - https://en.wikipedia.org/wiki/Comparison_of_browser_engines]]
+
+
+*** DVI Opcodes
+
+From [[https://web.archive.org/web/20070403030353/http://www.math.umd.edu/~asnowden/comp-cont/dvi.html][DVI Specification]]
+
+#+name: The DVI Instruction Set
+|    Opcode | Instruction Name | Parameters                                                                | Description                         |
+|   0...127 | set_char_i       |                                                                           | typeset a character and move right  |
+|       128 | set1             | c[1]                                                                      | typeset a character and move right  |
+|       129 | set2             | c[2]                                                                      |                                     |
+|       130 | set3             | c[3]                                                                      |                                     |
+|       131 | set4             | c[4]                                                                      |                                     |
+|       132 | set_rule         | a[4], b[4]                                                                | typeset a rule and move right       |
+|       133 | put1             | c[1]                                                                      | typeset a character                 |
+|       134 | put2             | c[2]                                                                      |                                     |
+|       135 | put3             | c[3]                                                                      |                                     |
+|       136 | put4             | c[4]                                                                      |                                     |
+|       137 | put_rule         | a[4], b[4]                                                                | typeset a rule                      |
+|       138 | nop              |                                                                           | no operation                        |
+|       139 | bop              | c_0[4]..c_9[4], p[4]                                                      | beginning of page                   |
+|       140 | eop              |                                                                           | ending of page                      |
+|       141 | push             |                                                                           | save the current positions          |
+|       142 | pop              |                                                                           | restore previous positions          |
+|       143 | right1           | b[1]                                                                      | move right                          |
+|       144 | right2           | b[2]                                                                      |                                     |
+|       145 | right3           | b[3]                                                                      |                                     |
+|       146 | right4           | b[4]                                                                      |                                     |
+|       147 | w0               |                                                                           | move right by w                     |
+|       148 | w1               | b[1]                                                                      | move right and set w                |
+|       149 | w2               | b[2]                                                                      |                                     |
+|       150 | w3               | b[3]                                                                      |                                     |
+|       151 | w4               | b[4]                                                                      |                                     |
+|       152 | x0               |                                                                           | move right by x                     |
+|       153 | x1               | b[1]                                                                      | move right and set x                |
+|       154 | x2               | b[2]                                                                      |                                     |
+|       155 | x3               | b[3]                                                                      |                                     |
+|       156 | x4               | b[4]                                                                      |                                     |
+|       157 | down1            | a[1]                                                                      | move down                           |
+|       158 | down2            | a[2]                                                                      |                                     |
+|       159 | down3            | a[3]                                                                      |                                     |
+|       160 | down4            | a[4]                                                                      |                                     |
+|       161 | y0               |                                                                           | move down by y                      |
+|       162 | y1               | a[1]                                                                      | move down and set y                 |
+|       163 | y2               | a[2]                                                                      |                                     |
+|       164 | y3               | a[3]                                                                      |                                     |
+|       165 | y4               | a[4]                                                                      |                                     |
+|       166 | z0               |                                                                           | move down by z                      |
+|       167 | z1               | a[1]                                                                      | move down and set z                 |
+|       168 | z2               | a[2]                                                                      |                                     |
+|       169 | z3               | a[3]                                                                      |                                     |
+|       170 | z4               | a[4]                                                                      |                                     |
+| 171...234 | fnt_num_i        |                                                                           | set current font to i               |
+|       235 | fnt1             | k[1]                                                                      | set current font                    |
+|       236 | fnt2             | k[2]                                                                      |                                     |
+|       237 | fnt3             | k[3]                                                                      |                                     |
+|       238 | fnt4             | k[4]                                                                      |                                     |
+|       239 | xxx1             | k[1], x[k]                                                                | extension to DVI primitives         |
+|       240 | xxx2             | k[2], x[k]                                                                |                                     |
+|       241 | xxx3             | k[3], x[k]                                                                |                                     |
+|       242 | xxx4             | k[4], x[k]                                                                |                                     |
+|       243 | fnt_def1         | k[1], c[4], s[4], d[4], a[1], l[1], n[a+l]                                | define the meaning of a font number |
+|       244 | fnt_def2         | k[2], c[4], s[4], d[4], a[1], l[1], n[a+l]                                |                                     |
+|       245 | fnt_def3         | k[3], c[4], s[4], d[4], a[1], l[1], n[a+l]                                |                                     |
+|       246 | fnt_def4         | k[4], c[4], s[4], d[4],  a[1], l[1], n[a+l]                               |                                     |
+|       247 | pre              | i[1], num[4], den[4], mag[4], k[1], x[k]                                  | preamble                            |
+|       248 | post             | p[4], num[4], den[4], mag[4], l[4], u[4], s[2], t[2] < font definitions > | postamble beginning                 |
+|       249 | post_post        | q[4], i[1]; 223's                                                         | postamble ending                    |
+| 250...255 | undefined        |                                                                           |                                     |
+
+
+
+The non-char commands can be grouped into:
+- Draw a rectangle (rule)
+- Put char and rule (Just like the set commands but don't moving reference point)
+- BOP and EOP
+- Push and Pop
+- Move reference point to the right a units
+- Move reference point to the right w units or set w for next time
+- Move reference point to the right x units or set x for next time
+- Move reference point down a units
+- Move reference point down y units or set y for next time
+- Move reference point down z units or set z for next time
+- Set font (64 of them)
+- Specials (maybe they are used for color or something?)
+- Font define
+- Preamble, postamble begin, and postamble end
+
+We can ignore:
+- set1,2,3,4 because they are for chars above 127 which we don't need since we are using UTF-8 instead
+
+
+*** UTF-8
+
+The first 32 ASCII characters could be used in place of the non-char
+DVI commands. We can try to keep close to the original semantics. For
+example:
+|    |     | Original Meaning            | Our Meaning                    |
+|  0 | NUL | Null character              |                                |
+|  1 | SOH | Start of Heading            | Preamble                       |
+|  2 | STX | Start of Text               |                                |
+|  3 | ETX | End of Text                 | Postamble Begin                |
+|  4 | EOT | End of Transmission         | Postamble End                  |
+|  5 | ENQ | Enquiry                     |                                |
+|  6 | ACK | Acknowledge                 |                                |
+|  7 | BEL | Bell, Alert                 |                                |
+|  8 | BS  | Backspace                   |                                |
+|  9 | HT  | Horizontal Tab (\t)         |                                |
+| 10 | LF  | Line Feed (\n)              |                                |
+| 11 | VT  | Vertical Tabulation         | Move down                      |
+| 12 | FF  | Form Feed                   |                                |
+| 13 | CR  | Carriage Return             |                                |
+| 14 | SO  | Shift Out                   |                                |
+| 15 | SI  | Shift In                    |                                |
+| 16 | DLE | Data Link Escape            |                                |
+| 17 | DC1 | Device Control One (XON)    |                                |
+| 18 | DC2 | Device Control Two          |                                |
+| 19 | DC3 | Device Control Three (XOFF) |                                |
+| 20 | DC4 | Device Control Four         |                                |
+| 21 | NAK | Negative Acknowledge        |                                |
+| 22 | SYN | Synchronous Idle            |                                |
+| 23 | ETB | End of Transmission Block   |                                |
+| 24 | CAN | Cancel                      |                                |
+| 25 | EM  | End of medium               |                                |
+| 26 | SUB | Substitute                  |                                |
+| 27 | ESC | Escape                      |                                |
+| 28 | FS  | File Separator              |                                |
+| 29 | GS  | Group Separator             |                                |
+| 30 | RS  | Record Separator            |                                |
+| 31 | US  | Unit Separator              |                                |
+| 32 |     | Space                       | Move right (and logical space) |
+
+*** UTF-32
+
+If we encoded the text as UTF-32 then 21 of those 32 bits would go to
+the text encoding, because that's all UTF-32 uses and the remaining 11
+bits could go to control opcodes. Oh wow, the [[https://en.wikipedia.org/wiki/UTF-32#Use][Wikipedia page for
+UTF-32]] actually mentions using those last 11 bits for this purpose
+internally in text rendering engines but doesn't have any references.
