@@ -6,10 +6,7 @@ const Buffer = struct {
     name: std.ArrayList(u8),
     fn create(name: []const u8) Error!Buffer {
         var b = Buffer{.name=std.ArrayList(u8).init(allocator)};
-        //std.mem.copy(u8, &b.name, name);
-        //b.name[5] = 0;
         try b.name.appendSlice(name);
-        
         return b;
     }
 };
