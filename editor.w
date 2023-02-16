@@ -26,6 +26,11 @@ int main(void) {
   
 write(STDOUT_FILENO, "\x1b[2J", 4);
 write(STDOUT_FILENO, "\x1b[H", 3);
+Buffer * b = &buffers[current_buffer];
+for (int i = 0; i < 64; i++) {
+  printf("%c", b->contents[i]);
+}
+
 
 @ Process Keypress Functions.
 
@@ -41,7 +46,10 @@ char read_key() {
 
 void process_keypress() {
   char c = read_key();
-  switch (c) {
+  if (c > 'a' && c < 'z') {
+    insert(c);
+  } 
+  else switch (c) {
     case CTRL_KEY('q'):
       write(STDOUT_FILENO, "\x1b[2J", 4);
       write(STDOUT_FILENO, "\x1b[H", 3);      
@@ -58,9 +66,11 @@ typedef struct Buffer {
   int32_t  point;
   int16_t  id;
   int16_t  next;
+  char     contents[64];
 } Buffer;
 
 Buffer buffers[64]; // TODO: make expandable
+uint16_t current_buffer = 0;
 uint16_t last_buffer = 0;
 
 // Returns buffer id
@@ -75,6 +85,11 @@ uint16_t create_buffer(const char* name, size_t strlen) {
   }
   memcpy(buffers[++last_buffer].name, name, strlen);
   return last_buffer;
+}
+
+void insert(char c) {
+  Buffer * b = &buffers[current_buffer];
+  b->contents[b->point++] = c;
 }
 
 @ Macros. Where we make our lives just a little bit easier.
