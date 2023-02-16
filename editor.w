@@ -5,27 +5,42 @@ line-by-line explaination of {\it Kilo} while writing this.
 
 @c
 @<Includes@>@;
+@<Macros@>@;
 @<Disable Terminal Echo@>@;
 @<Buffer Management@>@;
+@<Process Keypress Functions@>@;
 
 int main(void) {
   enable_raw_mode();
   create_buffer("*scratch*");
-  
   while (1) {
-    char c = '\0';
-    if (read(STDIN_FILENO, &c, 1) == -1 && errno != EAGAIN) die("read");
-    if (iscntrl(c)) {
-      printf("%d\r\n", c);
-    } else {
-      printf("%d ('%c')\r\n", c, c);
-    }
-    if (c == 'q') break;
+    process_keypress();
   }
-  
   return 0;
 }
 
+@ Process Keypress Functions.
+
+@<Process Keypress Functions@>=
+char read_key() {
+  int nread;
+  char c;
+  while ((nread = read(STDIN_FILENO, &c, 1)) != 1) {
+    if (nread == -1 && errno != EAGAIN) die("read");
+  }
+  return c;
+}
+
+void process_keypress() {
+  char c = read_key();
+  switch (c) {
+    case CTRL_KEY('q'):
+      exit(0);
+      break;
+  }
+}
+
+  
 @ Buffer Management.
 
 @<Buffer Management@>=
@@ -49,6 +64,12 @@ uint16_t create_buffer(const char* name) {
   strncpy(buffers[++last_buffer].name, name, 64);
   return last_buffer;
 }
+
+@ Macros. Where we make our lives just a little bit easier.
+
+@<Macros@>=
+
+#define CTRL_KEY(k) ((k) & 0x1f)
 
 @ Just the stupid includes from the |clib|.
 
