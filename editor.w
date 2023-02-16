@@ -70,7 +70,7 @@ uint16_t create_buffer(const char* name) {
       return -1;
     }
   }
-  strncpy(buffers[++last_buffer].name, name, 64);
+  memcpy(buffers[++last_buffer].name, name, 64);
   return last_buffer;
 }
 
@@ -86,7 +86,6 @@ uint16_t create_buffer(const char* name) {
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <ctype.h>
 #include <string.h>
 #include <termios.h>
 #include <unistd.h>
