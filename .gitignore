@@ -1,0 +1,12 @@
+editor
+*.scn
+*.pdf
+*.idx
+*.log
+*.tex
+*.toc
+2023-01-20.emacs-from-scratch
+build
+experiments
+godot
+zig-cache

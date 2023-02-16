@@ -1,3 +1,8 @@
+@* Introduction. This is a text editor based off of Craig Finseth's
+book {\it The Craft of Text Editing -- Emacs for the Modern World} and
+Salvatore Sanfilippo's Kilo text editor.
+
+@c
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -50,14 +55,6 @@ int main(void) {
 }
 
 
-
-  // Test: Make two buffers with the same name and get error
-  /*
-  int16_t b = create_buffer("*scratch*");
-  printf("Buffer: %s\n", buffers[b].name);
-  int16_t b2 = create_buffer("*scratch*");
-  printf("Buffer: %d\n", b2);
-  */
   
 
 
