@@ -1,6 +1,7 @@
 @* Introduction. This is a text editor based off of Craig Finseth's
 book {\it The Craft of Text Editing -- Emacs for the Modern World} and
-Salvatore Sanfilippo's Kilo text editor.
+Salvatore Sanfilippo's {\it Kilo} text editor. I also used Paige Ruten's
+line-by-line explaination of {\it Kilo} while writing this.
 
 @c
 @<Includes@>@;
