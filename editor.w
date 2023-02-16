@@ -12,7 +12,7 @@ line-by-line explaination of {\it Kilo} while writing this.
 
 int main(void) {
   enable_raw_mode();
-  create_buffer("*scratch*");
+  create_buffer("*scratch*", sizeof("*scratch*"));
   while (1) {
     @<Refresh Screen@>@;
     process_keypress();
@@ -64,13 +64,16 @@ Buffer buffers[64]; // TODO: make expandable
 uint16_t last_buffer = 0;
 
 // Returns buffer id
-uint16_t create_buffer(const char* name) {
+uint16_t create_buffer(const char* name, size_t strlen) {
+  if (strlen > 64) {
+    return -1;
+  }
   for (int i = 0; i <= last_buffer; i++) {
-    if (strcmp(name, buffers[i].name) == 0) {
+    if (memcmp(name, buffers[i].name, strlen) == 0) {
       return -1;
     }
   }
-  memcpy(buffers[++last_buffer].name, name, 64);
+  memcpy(buffers[++last_buffer].name, name, strlen);
   return last_buffer;
 }
 
