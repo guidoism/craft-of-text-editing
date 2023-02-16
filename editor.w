@@ -14,10 +14,18 @@ int main(void) {
   enable_raw_mode();
   create_buffer("*scratch*");
   while (1) {
+    @<Refresh Screen@>@;
     process_keypress();
   }
   return 0;
 }
+
+@ Refresh Screen.
+
+@<Refresh Screen@>=
+  
+write(STDOUT_FILENO, "\x1b[2J", 4);
+write(STDOUT_FILENO, "\x1b[H", 3);
 
 @ Process Keypress Functions.
 
@@ -40,7 +48,6 @@ void process_keypress() {
   }
 }
 
-  
 @ Buffer Management.
 
 @<Buffer Management@>=
