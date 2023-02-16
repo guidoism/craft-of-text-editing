@@ -12,7 +12,13 @@ const Buffer = struct {
 };
 
 pub fn main() !void {
-    var b = try Buffer.create("*scratch*");
-    std.debug.print("{s}\n", .{b.name.items});
 }
 
+test "Create buffer" {
+    var buffers = std.ArrayList(Buffer).init(allocator);
+    var b = buffers.addOne();
+    //var b = try Buffer.create("*scratch*");
+    std.debug.print("{any}\n", .{b});
+    //std.debug.print("{s}\n", .{b.name.items});
+    //try std.testing.expectError(Error.failed, Buffer.create("*scratch*"));
+}

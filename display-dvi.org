@@ -22,6 +22,11 @@ appearences, the commonly used subset of PDF isn't particularly
 complex. But it's not particularly useful to describe a screen that
 can be updated (are we sure about this point, see open question).
 
+We could also use this as the display layer for an emacs-like text
+editor where simple operations like typing mono-spaced text would
+be added to directly by the editor and more complex situations like
+laying out a book.
+
 **** Assumptions
 
 - Our primary use is for text-heavy documents to be read on a screen
