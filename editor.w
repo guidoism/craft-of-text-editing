@@ -3,14 +3,22 @@ book {\it The Craft of Text Editing -- Emacs for the Modern World} and
 Salvatore Sanfilippo's Kilo text editor.
 
 @c
-#include <stdint.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <string.h>
-#include <termios.h>
-#include <unistd.h>
-#include <stdlib.h>
+@<Includes@>@;
+@<Disable Terminal Echo@>@;
+@<Buffer Management@>@;
 
+int main(void) {
+  enable_raw_mode();
+  create_buffer("*scratch*");
+  
+  char c;
+  while (read(STDIN_FILENO, &c, 1) == 1 && c != 'q');
+  return 0;
+}
+
+@ Buffer Management.
+
+@<Buffer Management@>=
 typedef struct Buffer {
   char     name[64];
   int32_t  point;
@@ -32,6 +40,20 @@ uint16_t create_buffer(const char* name) {
   return last_buffer;
 }
 
+@ Just the stupid includes from the |clib|.
+
+@<Includes@>=
+#include <stdint.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
+#include <termios.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+@ This is where we turn off echoing from the keyboard.
+
+@<Disable Terminal Echo@>=
 struct termios orig_termios;
 void disable_raw_mode() {
   tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios);
@@ -44,17 +66,3 @@ void enable_raw_mode() {
   raw.c_lflag &= ~(ECHO);
   tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
 }
-
-int main(void) {
-  enable_raw_mode();
-  create_buffer("*scratch*");
-  
-  char c;
-  while (read(STDIN_FILENO, &c, 1) == 1 && c != 'q');
-  return 0;
-}
-
-
-  
-
-
