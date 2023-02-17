@@ -23,14 +23,15 @@ int main(void) {
 
 @ Refresh Screen.
 
+
 @<Refresh Screen Functions@>=
 
 uint16_t rows = 25;
 uint16_t cols = 80;
   
 void refresh_screen(void) {
-  write(STDOUT_FILENO, "\x1b[2J", 4);
-  write(STDOUT_FILENO, "\x1b[H", 3);
+  write(STDOUT_FILENO, "\x1b[2J", 4); // Clear entire screen (J command with arg of 2)
+  write(STDOUT_FILENO, "\x1b[H", 3); // Reposition cursor to bottom left (row/col args omited)
   Buffer * b = &buffers[current_buffer];
   int k = 0;
   for (int j = 0; j < rows; j++) {
