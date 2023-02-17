@@ -9,12 +9,13 @@ line-by-line explaination of {\it Kilo} while writing this.
 @<Disable Terminal Echo@>@;
 @<Buffer Management@>@;
 @<Process Keypress Functions@>@;
+@<Refresh Screen Functions@>@;
 
 int main(void) {
   enable_raw_mode();
   create_buffer("*scratch*", sizeof("*scratch*"));
   while (1) {
-    @<Refresh Screen@>@;
+    refresh_screen();
     process_keypress();
   }
   return 0;
@@ -22,15 +23,28 @@ int main(void) {
 
 @ Refresh Screen.
 
-@<Refresh Screen@>=
-  
-write(STDOUT_FILENO, "\x1b[2J", 4);
-write(STDOUT_FILENO, "\x1b[H", 3);
-Buffer * b = &buffers[current_buffer];
-for (int i = 0; i < 64; i++) {
-  printf("%c", b->contents[i]);
-}
+@<Refresh Screen Functions@>=
 
+uint16_t rows = 25;
+uint16_t cols = 80;
+  
+void refresh_screen(void) {
+  write(STDOUT_FILENO, "\x1b[2J", 4);
+  write(STDOUT_FILENO, "\x1b[H", 3);
+  Buffer * b = &buffers[current_buffer];
+  int k = 0;
+  for (int j = 0; j < rows; j++) {
+    for (int i = 0; i < cols; i++) {
+      if (k < 64) {
+        printf("%c", b->contents[k++]);
+      }
+      else {
+        printf(" ", b->contents[k++]);
+      }
+    }
+    printf("\r\n");
+  }
+}
 
 @ Process Keypress Functions.
 
