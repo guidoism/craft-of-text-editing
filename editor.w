@@ -36,13 +36,13 @@ void refresh_screen(void) {
   for (int j = 0; j < rows; j++) {
     for (int i = 0; i < cols; i++) {
       if (k < 64) {
-        printf("%c", b->contents[k++]);
+        write(STDOUT_FILENO, &b->contents[k++], 1);
       }
       else {
-        printf(" ", b->contents[k++]);
+        write(STDOUT_FILENO, " ", 1);
       }
     }
-    printf("\r\n");
+    write(STDOUT_FILENO, "\r\n", 2);
   }
 }
 
