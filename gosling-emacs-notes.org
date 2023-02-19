@@ -1,0 +1,1 @@
+Gosling Emacs is probably the cleanest "real" Emacs we can study.
