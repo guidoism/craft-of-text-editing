@@ -1,1 +1,7 @@
 Gosling Emacs is probably the cleanest "real" Emacs we can study.
+
+** Map of Files
+
+- ~simplecoms.c~ - Simple commands, stuff like insert self, erase region, etc. ~InitSimp~ at the end of the file is where the commands are added to the keymaps and lisp function environment.
+
+
