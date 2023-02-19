@@ -3,6 +3,19 @@ book {\it The Craft of Text Editing -- Emacs for the Modern World} and
 Salvatore Sanfilippo's {\it Kilo} text editor. I also used Paige Ruten's
 line-by-line explaination of {\it Kilo} while writing this.
 
+Let's break apart our editor into: 1. Buffers that hold text, 2.
+Windows that are a view into a buffer, and 3. Editing the contents of
+a buffer.
+
+Let's start with the view since it's the most interesting. We are
+essentially projecting the one-dimensional sequence of characters into
+a two-dimensional window that is |w| characters wide and |h| characters
+high. A decision needs do be made: Do we truncate long lines or
+wrap them to the next line? We will want both options so let's
+implement both.
+
+
+
 @c
 @<Includes@>@;
 @<Macros@>@;
@@ -21,8 +34,9 @@ int main(void) {
   return 0;
 }
 
-@ Refresh Screen.
+@* Project the Buffer onto the Window.
 
+@ Refresh Screen.
 
 @<Refresh Screen Functions@>=
 
@@ -46,6 +60,9 @@ void refresh_screen(void) {
     write(STDOUT_FILENO, "\r\n", 2);
   }
 }
+
+@* Edit Contents of the Buffer.
+
 
 @ Process Keypress Functions.
 
