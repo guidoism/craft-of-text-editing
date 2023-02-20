@@ -49,7 +49,7 @@ typedef struct Cell {
   union {
     i64  n;
     u21  c; // unicode codepoint
-    Slug s;
+    //Slug s;
     Cons p;
   } 
 } Cell;
@@ -109,14 +109,18 @@ This is also where the buffer type is defined.
 
 #+name: create_buffer
 #+begin_src c
+typedef struct String { u8 s[64]; } String;
 typedef struct Buffer {
   String name;
-  byte* contents;
-  Encoding encoding;
-  Point point;
-  Mark mark;
+  u8* contents;
+  // Encoding encoding; assume utf-8 for now
+  u64 point;
+  // Mark mark; no need to this quite yet
   
 } Buffer;
+
+Buffer buffers[64];
+
 #+end_src
 
 *** Insert self
@@ -129,23 +133,77 @@ the character being inserted.
 #+name: insert_self
 #+begin_src c
 Status insert_self(BufferId id, u21 ch) {
-  
+  u8 * b = buffers[id].contents;
+  u64 loc = buffers[id].point;
+  u8 enc[4];
+  u8 n = to_utf8(enc, ch);
+  if (n == 0) return NotUnicode;
+  memmove(b+loc+n, b+loc, n);
+  return Success;
 }
 
 #+end_src
 
+*** Unicode Helpers
 
+#+name: unicode_helpers
+#+begin_src c
+u8 to_utf8(u8 * buf, u21 ch)
+{
+    if (ch <= 0x7F) {
+        buf[0] = ch;
+        return 1;
+    }
+    if (ch <= 0x7FF) {
+        buf[0] = 0xC0 | (ch >> 6);            /* 110xxxxx */
+        buf[1] = 0x80 | (ch & 0x3F);          /* 10xxxxxx */
+        return 2;
+    }
+    if (ch <= 0xFFFF) {
+        buf[0] = 0xE0 | (ch >> 12);           /* 1110xxxx */
+        buf[1] = 0x80 | ((ch >> 6) & 0x3F);   /* 10xxxxxx */
+        buf[2] = 0x80 | (ch & 0x3F);          /* 10xxxxxx */
+        return 3;
+    }
+    if (ch <= 0x10FFFF) {
+        buf[0] = 0xF0 | (ch >> 18);           /* 11110xxx */
+        buf[1] = 0x80 | ((ch >> 12) & 0x3F);  /* 10xxxxxx */
+        buf[2] = 0x80 | ((ch >> 6) & 0x3F);   /* 10xxxxxx */
+        buf[3] = 0x80 | (ch & 0x3F);          /* 10xxxxxx */
+        return 4;
+    }
+    return 0;
+}
+#+end_src
 
 
 ** Setup
 
 #+name: typedefs
-#+begin_src c
+#+begin_src c :tangle build/third.c :noweb yes
 #include <stdint.h>
+#include <stddef.h>
 typedef uint8_t u8;
+typedef uint32_t u21; // unicode code point, only use 21 bits
 typedef uint32_t u32;
 typedef int64_t i64;
-typedef char[8] Slug; // a short string (≤ 8 bytes)
+typedef uint64_t u64;
+typedef uint8_t Status;
+typedef uint16_t BufferId;
+//typedef char[8] Slug; // a short string (≤ 8 bytes)
+
+enum {Success,NotUnicode};
+
+void * memmove(void * destination, const void * source, size_t num);
+
+<<unicode_helpers>>
+<<create_buffer>>
+<<insert_self>>
+
+int main(void) {
+  return 0;
+}
+
 #+end_src
 
 ** Stupid Ideas
@@ -155,3 +213,4 @@ typedef char[8] Slug; // a short string (≤ 8 bytes)
 - When loading a file we can write out the text pretty quickly into a
   block of cells and then write out the car/cdr parts in a different
   part of the block all at once.
+

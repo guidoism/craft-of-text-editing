@@ -6,3 +6,6 @@ all: editor.w
 
 see: all
 	open editor.pdf
+
+third: build/third.c
+	clang -std=c17 -Os build/third.c -o build/third
