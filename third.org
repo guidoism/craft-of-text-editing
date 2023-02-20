@@ -109,7 +109,6 @@ This is also where the buffer type is defined.
 
 #+name: create_buffer
 #+begin_src c
-typedef struct String { u8 len; u8 s[64]; } String;
 typedef struct Buffer {
   BufferId id;
   String name;
@@ -135,7 +134,6 @@ Status create_buffer(String name) {
   b->name = name;
   return Success;
 }
-
 #+end_src
 
 *** Insert self
@@ -163,6 +161,12 @@ Status insert_self(BufferId id, u21 ch) {
 
 #+name: unicode_helpers
 #+begin_src c
+typedef struct String { u8 len; u8 s[64]; } String;
+String str(const char * x) {
+  String y = {.len=sizeof(x)};
+  return y;
+}
+
 u8 to_utf8(u8 * buf, u21 ch)
 {
     if (ch <= 0x7F) {
@@ -215,6 +219,7 @@ enum {Success,Failure,NotUnicode};
 <<insert_self>>
 
 int main(void) {
+  create_buffer(str("*scratch*"));
   return 0;
 }
 
