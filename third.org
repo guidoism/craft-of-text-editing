@@ -1,0 +1,91 @@
+This text editor is essentially just a SECD machine optimized for
+representing buffers of text in a format that is useful for editing
+operations and typesetting it to a display.
+
+** Buffer Representation
+
+The choice of data structure for a buffer of text is dependent several
+factors most notably how much text, whether it is full of many short
+lines or few long lines, and whether it will be mostly just read or is
+under active editing.
+
+We recognized that we don't have to use the same data structure for
+all active buffer nor even the same data structure for the buffer over
+its lifetime.
+
+Since we are already using a Lisp under the covers the simplest data
+structure would be a list with one character per node. In fact, if we
+make it slightly more complex in the buffer (a list of lists) where we
+represent individual lines, then we will have an easier time
+typesetting and during cursor management.
+
+*** Lisp Nodes
+
+The classic C implementation of a Lisp node is an implicit tagged
+union of the native word size where the lower 3 bits of a pointer tag
+the data that it points to and structs in the array-of-structs style.
+
+The modern style is for a struct-of-arrays where we have large
+contiguous swaths of identially typed data. We are going to assume a
+64 bit native word size here for simplicity. I can think of no good
+reason to make this program optimized for other word sizes. If it is
+then the hypothetical 32-bit word size advocate is encouraged to fork
+this codebase.
+
+A block of 64 cells (4096 bytes) is a natural point of segmentation.
+This allows flags for all 64 cells to each fit into a single 64 bit
+word.
+
+#+begin_src c
+typedef struct Cons {
+  u32 car;
+  u32 cde;
+} Cons;
+
+typedef struct Cell {
+  union {
+    i64  n;
+    u8   c;
+    Slug s;
+    Cons p;
+  } 
+} Cell;
+
+enum Tag {Number, Character, Slug, ConsPair};
+
+Tag  tags[4096];
+Cell cells[4096];
+#+end_src
+
+** Buffers
+
+Everything is a buffer. That statement is not quite true, but it's
+true enough. Files that we edit are loading into a buffer. When we
+start a new file we start with an empty buffer and later bind it to
+and save it to a file. Commands are typed into a (mini-) buffer.
+Background status is stored in buffers. This is the magic that makes
+Emacs so hackable.
+
+
+
+
+
+
+
+
+
+
+** Setup
+
+#+name: typedefs
+#+begin_src c
+#include <stdint.h>
+typedef uint8_t u8;
+typedef uint32_t u32;
+typedef int64_t i64;
+typedef char[8] Slug; // a short string (≤ 8 bytes)
+#+end_src
+
+** Stupid Ideas
+
+- Maybe a slug should store 7 bit ascii chars and use the remaining bits for length?

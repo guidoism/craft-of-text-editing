@@ -1,0 +1,103 @@
+
+Let's break apart our editor into: 1. Buffers that hold text, 2.
+Windows that are a view into a buffer, and 3. Editing the contents of
+a buffer.
+
+Let's start with the view since it's the most interesting. We are
+essentially projecting the one-dimensional sequence of characters into
+a two-dimensional window that is W characters wide and H characters
+high. A decision needs do be made: Do we truncate long lines or
+wrap them to the next line? We will want both options so let's
+implement both.
+
+
+
+#+name: project_onto_window/simple
+#+begin_src python :results output
+def project_onto_window(buffer_slice, slice_size, window_buffer, window_size, w, h):
+    i = 0
+    j = 0
+    x = 0
+    y = 0
+    while j < window_size:
+        c = buffer_slice[i]
+        print(repr(c))
+        if c == '\n':
+            for x in range(x, w-x):
+                window_buffer[j] = ' '
+                j += 1
+            i += 1
+        else:
+            window_buffer[j] = c
+            i += 1
+            
+        j += 1
+        x += 1
+        y += 1
+        if x == w:
+            x = 0
+            y += 1
+
+
+a = """
+guido
+        enrico
+
+bartolucci
+"""
+width = 12
+height = 5
+b = ['◦'] * (width*height)
+project_onto_window(a, len(a), b, width*height, width, height)
+from more_itertools import chunked
+for line in chunked(['¤' if c == '\n' else c for c in b], width):
+    print(''.join(line))
+#+end_src
+
+#+RESULTS: project_onto_window/simple
+
+
+#+name: project_onto_window/simple
+#+begin_src c
+void project_onto_window(char * buffer_slice, int slice_size, char * window_buffer, int window_size, int w, int h) {
+  int i = 0; // Current place in the buffer slice
+  char c;
+  for (int y = 0; y < h; y++) {
+    for (int x = 0; x < w; x++) {
+      c = buffer_slice[i];
+      if (c == '\n') {
+        
+      }
+    }
+  }
+}
+#+end_src
+
+We start out by clearing out the whole buffer all at once, this will
+make the rest of the projection a little bit simpler.
+
+#+name: project_onto_window/from_perspective_of_buffer
+#+begin_src c
+void project_onto_window(char * buffer_slice, int slice_size, char * window_buffer, int window_size, int w, int h) {
+  memset(window_buffer, ' ', w*h);
+  int x = 0;
+  int y = 0;
+  int i = 0;
+  int j = 0;
+  while(i < slice_size && j < window_size) {
+    char c = buffer_slice[i];
+    if (c < 32) {
+      // Shift to the end of the line and let the existing mechanism move to the next line
+      if (c == '\n') { x = w - 1 }
+    }
+    else {
+      window_buffer[j] = c;
+    }
+
+    i += 1;
+    x += 1;
+    if (x == w) { x = 0; y += 1 }
+    j = w*y + x;
+  }
+}
+#+end_src
