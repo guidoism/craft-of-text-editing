@@ -109,8 +109,9 @@ This is also where the buffer type is defined.
 
 #+name: create_buffer
 #+begin_src c
-typedef struct String { u8 s[64]; } String;
+typedef struct String { u8 len; u8 s[64]; } String;
 typedef struct Buffer {
+  BufferId id;
   String name;
   u8* contents;
   // Encoding encoding; assume utf-8 for now
@@ -120,6 +121,21 @@ typedef struct Buffer {
 } Buffer;
 
 Buffer buffers[64];
+u16 buffers_len;
+
+Status create_buffer(String name) {
+  for (int i = 0; i < buffers_len; i++) {
+    if (memcmp(buffers[i].name.s, name.s, name.len) == 0) {
+      return Failure;
+    }
+  }
+  int i = buffers_len++;
+  Buffer * b = &buffers[i];
+  b->id = i;
+  b->name.len = name.len;
+  memcpy(b->name.s, name.s, name.len);
+  return Success;
+}
 
 #+end_src
 
@@ -182,8 +198,9 @@ u8 to_utf8(u8 * buf, u21 ch)
 #+name: typedefs
 #+begin_src c :tangle build/third.c :noweb yes
 #include <stdint.h>
-#include <stddef.h>
+#include <string.h>
 typedef uint8_t u8;
+typedef uint16_t u16;
 typedef uint32_t u21; // unicode code point, only use 21 bits
 typedef uint32_t u32;
 typedef int64_t i64;
@@ -192,9 +209,7 @@ typedef uint8_t Status;
 typedef uint16_t BufferId;
 //typedef char[8] Slug; // a short string (≤ 8 bytes)
 
-enum {Success,NotUnicode};
-
-void * memmove(void * destination, const void * source, size_t num);
+enum {Success,Failure,NotUnicode};
 
 <<unicode_helpers>>
 <<create_buffer>>
