@@ -163,7 +163,9 @@ Status insert_self(BufferId id, u21 ch) {
 #+begin_src c
 typedef struct String { u8 len; u8 s[64]; } String;
 String str(const char * x) {
+  // TODO: assert string length
   String y = {.len=sizeof(x)};
+  memcpy(y.s, x, y.len);
   return y;
 }
 
