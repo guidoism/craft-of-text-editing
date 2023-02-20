@@ -14,8 +14,6 @@ high. A decision needs do be made: Do we truncate long lines or
 wrap them to the next line? We will want both options so let's
 implement both.
 
-
-
 @c
 @<Includes@>@;
 @<Macros@>@;
@@ -62,6 +60,11 @@ void refresh_screen(void) {
 }
 
 @* Edit Contents of the Buffer.
+
+{\it The Emacs Way of Doing Things} is that every key
+stroke is a command, even something as simple as the
+letter 'a'. This enables extreme flexability. We can
+always change the definition.
 
 
 @ Process Keypress Functions.

@@ -19,6 +19,9 @@ make it slightly more complex in the buffer (a list of lists) where we
 represent individual lines, then we will have an easier time
 typesetting and during cursor management.
 
+TODO: Is this actually true? Is a large flat buffer of memory actually
+easier?
+
 *** Lisp Nodes
 
 The classic C implementation of a Lisp node is an implicit tagged
@@ -45,7 +48,7 @@ typedef struct Cons {
 typedef struct Cell {
   union {
     i64  n;
-    u8   c;
+    u21  c; // unicode codepoint
     Slug s;
     Cons p;
   } 
@@ -66,11 +69,70 @@ and save it to a file. Commands are typed into a (mini-) buffer.
 Background status is stored in buffers. This is the magic that makes
 Emacs so hackable.
 
+A text file is a one-dimensional representation of a two-dimensional
+document. For example, newlines are control characters that describe
+how to convert the file into the 2d plane of glyphs.
 
+This is an important point to remember. There's nothing sacred about
+drawing one character at a time, from left to right, and when we get
+to the right of the display wrapping to the next line by moving down
+the glyph height and starting again at the far left and doing the
+same when we reach a newline character instead of drawing it.
 
+Painting a sequence of glyphs across the screen in a zig-zag is pretty
+universal for text, but the direction you move isn't.
 
+In fact, we will almost certainly want to visualize a sequence of
+characters in different ways. For example: wrapping long lines vs
+truncation.
 
+And this brings up another difference, do we want the cursor to move
+around the screen without any regard to the structure of the text
+under it or does "move up" for example really mean move to the
+previous line at the same column offset? And what happens if the
+previous line is too short and doesn't have that column? And what
+happens if you keep moving up and encounter another line that /is/
+long enough? 
 
+Mentally de-coupling the sequence of characters in a buffer with the
+visualization opens up other potential improvements. Maybe we can also
+display a PDF as either the textual format or as the drawn document
+the author intended. Or we could constrain code files to always be
+syntactically correct.
+
+We will start here with the simplest command for the simplest buffer
+implementation.
+
+*** Create a new buffer
+
+This is also where the buffer type is defined.
+
+#+name: create_buffer
+#+begin_src c
+typedef struct Buffer {
+  String name;
+  byte* contents;
+  Encoding encoding;
+  Point point;
+  Mark mark;
+  
+} Buffer;
+#+end_src
+
+*** Insert self
+
+Insert the character that has been typed.
+
+The universal argument is assumed to be the number of times to repeat
+the character being inserted.
+
+#+name: insert_self
+#+begin_src c
+Status insert_self(BufferId id, u21 ch) {
+  
+}
+
+#+end_src
 
 
 
@@ -88,4 +150,8 @@ typedef char[8] Slug; // a short string (≤ 8 bytes)
 
 ** Stupid Ideas
 
-- Maybe a slug should store 7 bit ascii chars and use the remaining bits for length?
+- Maybe a slug should store 7 bit ascii chars and use the remaining
+  bits for length?
+- When loading a file we can write out the text pretty quickly into a
+  block of cells and then write out the car/cdr parts in a different
+  part of the block all at once.
