@@ -132,8 +132,9 @@ Status create_buffer(String name) {
   int i = buffers_len++;
   Buffer * b = &buffers[i];
   b->id = i;
-  b->name.len = name.len;
-  memcpy(b->name.s, name.s, name.len);
+  b->name = name;
+  //b->name.len = name.len;
+  //memcpy(b->name.s, name.s, name.len);
   return Success;
 }
 
