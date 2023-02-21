@@ -164,7 +164,7 @@ Status insert_self(u21 ch) {
   u8 n = to_utf8(enc, ch);
   if (n == 0) return NotUnicode;
   memmove(b+loc+n, b+loc, n);
-  b[loc] = enc[0];
+  memcpy(b+loc, enc, n);
   buffers[current_buffer_id].point++;
   return Success;
 }
