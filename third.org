@@ -113,7 +113,7 @@ typedef struct Buffer {
   BufferId id;
   String name;
   u8* contents;
-  // Encoding encoding; assume utf-8 for now
+  u64 length;
   u64 point;
   // Mark mark; no need to this quite yet
   
@@ -166,6 +166,7 @@ Status insert_self(u21 ch) {
   memmove(b+loc+n, b+loc, n);
   memcpy(b+loc, enc, n);
   buffers[current_buffer_id].point++;
+  buffers[current_buffer_id].length += n;
   return Success;
 }
 #+end_src
