@@ -121,6 +121,7 @@ typedef struct Buffer {
 
 Buffer buffers[64];
 u16 buffers_len;
+BufferId current_buffer_id;
 
 Status create_buffer(String name) {
   for (int i = 0; i < buffers_len; i++) {
@@ -133,6 +134,15 @@ Status create_buffer(String name) {
   b->id = i;
   b->name = name;
   return Success;
+}
+
+Status set_current_buffer(String name) {
+  for (int i = 0; i < buffers_len; i++) {
+    if (memcmp(buffers[i].name.s, name.s, name.len) == 0) {
+      current_buffer_id = i;
+    }
+  }
+  return Failure;
 }
 #+end_src
 
@@ -222,6 +232,7 @@ enum {Success,Failure,NotUnicode};
 
 int main(void) {
   create_buffer(str("*scratch*"));
+  set_current_buffer(str("*scratch*"));
   return 0;
 }
 

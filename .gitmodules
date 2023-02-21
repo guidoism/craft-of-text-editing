@@ -1,3 +1,6 @@
 [submodule "cosmopolitan"]
 	path = cosmopolitan
 	url = https://github.com/jart/cosmopolitan
+[submodule "gosling-emacs"]
+	path = gosling-emacs
+	url = https://github.com/bobbae/gosling-emacs
