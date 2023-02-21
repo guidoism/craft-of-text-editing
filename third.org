@@ -218,6 +218,16 @@ u8 to_utf8(u8 * buf, u21 ch)
 }
 #+end_src
 
+** Display
+
+#+name: redisplay
+#+begin_src c
+Status redisplay(void) {
+  printf("Buffer: %s\n", buffers[current_buffer_id].contents);
+  return Success;
+}
+#+end_src
+
 
 ** Setup
 
@@ -242,6 +252,7 @@ enum {Success,Failure,NotUnicode};
 <<unicode_helpers>>
 <<create_buffer>>
 <<insert_self>>
+<<redisplay>>
 
 int main(void) {
   create_buffer(str("*scratch*"));
@@ -251,7 +262,7 @@ int main(void) {
   insert_self('i');
   insert_self('d');
   insert_self('o');
-  printf("Buffer: %s\n", buffers[current_buffer_id].contents);
+  redisplay();
   return 0;
 }
 
