@@ -133,6 +133,7 @@ Status create_buffer(String name) {
   Buffer * b = &buffers[i];
   b->id = i;
   b->name = name;
+  b->contents = malloc(100);
   return Success;
 }
 
@@ -155,17 +156,26 @@ the character being inserted.
 
 #+name: insert_self
 #+begin_src c
-Status insert_self(BufferId id, u21 ch) {
-  u8 * b = buffers[id].contents;
-  u64 loc = buffers[id].point;
+Status insert_self(u21 ch) {
+  u8 * b = buffers[current_buffer_id].contents;
+  u64 loc = buffers[current_buffer_id].point;
+  printf("Inserting %d to location %llu\n", ch, loc);
   u8 enc[4];
   u8 n = to_utf8(enc, ch);
   if (n == 0) return NotUnicode;
   memmove(b+loc+n, b+loc, n);
+  b[loc] = enc[0];
+  buffers[current_buffer_id].point++;
   return Success;
 }
-
 #+end_src
+
+*** Gap Buffers
+
+In the actual implementation they use Gap Buffers. A buffer
+initial starts off all gap, the first part is 0 length at
+the beginning and the second part is 0 length at the end.
+
 
 *** Unicode Helpers
 
@@ -214,6 +224,8 @@ u8 to_utf8(u8 * buf, u21 ch)
 #+begin_src c :tangle build/third.c :noweb yes
 #include <stdint.h>
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 typedef uint8_t u8;
 typedef uint16_t u16;
 typedef uint32_t u21; // unicode code point, only use 21 bits
@@ -233,6 +245,12 @@ enum {Success,Failure,NotUnicode};
 int main(void) {
   create_buffer(str("*scratch*"));
   set_current_buffer(str("*scratch*"));
+  insert_self('g');
+  insert_self('u');
+  insert_self('i');
+  insert_self('d');
+  insert_self('o');
+  printf("Buffer: %s\n", buffers[current_buffer_id].contents);
   return 0;
 }
 
