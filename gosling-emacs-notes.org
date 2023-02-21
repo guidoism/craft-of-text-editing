@@ -6,6 +6,6 @@ Gosling Emacs is probably the cleanest "real" Emacs we can study.
 
 ** Startup Process
 
-1. Initialize buffer system (~Initbf()~). 
+1. Initialize buffer system (~Initbf()~ in ~buffer.[hc]~). 
 
 
