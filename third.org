@@ -59,14 +59,14 @@ In the actual implementation they use Gap Buffers. A buffer
 initial starts off all gap, the first part is 0 length at
 the beginning and the second part is 0 length at the end.
 
-*** Create a new buffer
+**** Naive Buffer
 
-We will start here with the simplest command for the simplest buffer
-implementation.
+Before we implement the more complex gap buffer we will
+implement the most naive form of buffer. Just a flat piece
+of memory that comes from malloc. We move everything after
+the insertion point with ~memmove~ during each edit.
 
-This is also where the buffer type is defined.
-
-#+name: create_buffer
+#+name: buffer_representation
 #+begin_src c
 typedef struct Buffer {
   BufferId id;
@@ -81,7 +81,17 @@ typedef struct Buffer {
 Buffer buffers[64];
 u16 buffers_len;
 BufferId current_buffer_id;
+#+end_src
 
+*** Create a new buffer
+
+We will start here with the simplest command for the simplest buffer
+implementation.
+
+This is also where the buffer type is defined.
+
+#+name: create_buffer
+#+begin_src c
 Status create_buffer(String name) {
   for (int i = 0; i < buffers_len; i++) {
     if (memcmp(buffers[i].name.s, name.s, name.len) == 0) {
@@ -201,6 +211,7 @@ typedef uint16_t BufferId;
 enum {Success,Failure,NotUnicode};
 
 <<unicode_helpers>>
+<<buffer_representation>>
 <<create_buffer>>
 <<insert_char>>
 <<redisplay>>
