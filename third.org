@@ -106,16 +106,16 @@ Status set_current_buffer(String name) {
 }
 #+end_src
 
-*** Insert self
+*** Insert a character
 
 Insert the character that has been typed.
 
 The universal argument is assumed to be the number of times to repeat
 the character being inserted.
 
-#+name: insert_self
+#+name: insert_char
 #+begin_src c
-Status insert_self(u21 ch) {
+Status insert_char(u21 ch) {
   u8 * b = buffers[current_buffer_id].contents;
   u64 loc = buffers[current_buffer_id].point;
   printf("Inserting %d to location %llu\n", ch, loc);
@@ -180,7 +180,6 @@ Status redisplay(void) {
 }
 #+end_src
 
-
 ** Setup
 
 #+name: typedefs
@@ -203,17 +202,17 @@ enum {Success,Failure,NotUnicode};
 
 <<unicode_helpers>>
 <<create_buffer>>
-<<insert_self>>
+<<insert_char>>
 <<redisplay>>
 
 int main(void) {
   create_buffer(str("*scratch*"));
   set_current_buffer(str("*scratch*"));
-  insert_self('g');
-  insert_self('u');
-  insert_self('i');
-  insert_self('d');
-  insert_self('o');
+  insert_char('g');
+  insert_char('u');
+  insert_char('i');
+  insert_char('d');
+  insert_char('o');
   redisplay();
   return 0;
 }
@@ -221,7 +220,6 @@ int main(void) {
 #+end_src
 
 ** Extensions
-
 *** Lisp Nodes
 
 The classic C implementation of a Lisp node is an implicit tagged
@@ -259,7 +257,6 @@ enum Tag {Number, Character, Slug, ConsPair};
 Tag  tags[4096];
 Cell cells[4096];
 #+end_src
-
 
 
 
