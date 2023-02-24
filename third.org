@@ -217,6 +217,30 @@ Cell cells[4096];
 
 
 
+
+** Events
+
+Now we move on to the human scale. This is where we react to keys
+being pressed or being told that we need to re-draw the display.
+
+*** Handle Event
+
+This is what happens when something like a key is pressed or the
+window is re-sized.
+
+#+name: handle_event
+#+begin_src c
+void handle_event(const sapp_event* event) {
+  // SAPP_EVENTTYPE_KEY_DOWN
+  // SAPP_EVENTTYPE_KEY_UP
+  if (event->type == SAPP_EVENTTYPE_CHAR) {
+    insert_char(event->char_code);
+    // bool key_repeat;
+    // uint32_t modifiers;
+  }
+}
+#+end_src
+
 ** TextMode vs Graphics
 
 Using Sokol, to build:
@@ -274,17 +298,7 @@ enum {Success,Failure,NotUnicode};
 <<buffer_representation>>
 <<create_buffer>>
 <<insert_char>>
-
-void event(const sapp_event* event) {
-  // SAPP_EVENTTYPE_KEY_DOWN
-  // SAPP_EVENTTYPE_KEY_UP
-  if (event->type == SAPP_EVENTTYPE_CHAR) {
-    insert_char(event->char_code);
-    // bool key_repeat;
-    // uint32_t modifiers;
-
-  }
-}
+<<handle_event>>
 
 typedef struct {
     FONScontext* fons;
@@ -441,7 +455,7 @@ sapp_desc sokol_main(int argc, char* argv[]) {
     .frame_cb = frame,
     .cleanup_cb = cleanup,
     //.event_cb = __dbgui_event,
-    .event_cb = event,
+    .event_cb = handle_event,
     .width = 800,
     .height = 600,
     .high_dpi = true,
