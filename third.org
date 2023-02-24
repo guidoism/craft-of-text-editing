@@ -223,6 +223,50 @@ Cell cells[4096];
 Now we move on to the human scale. This is where we react to keys
 being pressed or being told that we need to re-draw the display.
 
+#+name: init
+#+begin_src c
+static void init(void) {
+  create_buffer(str("*scratch*"));
+  set_current_buffer(str("*scratch*"));
+
+  state.dpi_scale = sapp_dpi_scale();
+    sg_setup(&(sg_desc){
+        .context = sapp_sgcontext(),
+        .logger.func = slog_func,
+    });
+    __dbgui_setup(sapp_sample_count());
+    sgl_setup(&(sgl_desc_t){
+        .logger.func = slog_func
+    });
+
+    /* make sure the fontstash atlas width/height is pow-2 */
+    const int atlas_dim = round_pow2(512.0f * state.dpi_scale);
+    FONScontext* fons_context = sfons_create(&(sfons_desc_t){
+        .width = atlas_dim,
+        .height = atlas_dim,
+    });
+    state.fons = fons_context;
+    state.font_normal = FONS_INVALID;
+    state.font_italic = FONS_INVALID;
+    state.font_bold = FONS_INVALID;
+
+    /* use sokol_fetch for loading the TTF font files */
+    sfetch_setup(&(sfetch_desc_t){
+        .num_channels = 1,
+        .num_lanes = 4,
+        .logger.func = slog_func,
+    });
+    char path_buf[512];
+    sfetch_send(&(sfetch_request_t){
+        .path = "/Users/guido/Library/Fonts/MinionPro-Regular.otf",
+        .callback = font_normal_loaded,
+        .buffer = SFETCH_RANGE(state.font_normal_data),
+    });
+}
+#+end_src
+
+
+
 *** Handle Event
 
 This is what happens when something like a key is pressed or the
@@ -243,6 +287,7 @@ void handle_event(const sapp_event* event) {
 
 ** Display
 
+*** Display State
 #+name: display_state
 #+begin_src c
 typedef struct {
@@ -254,6 +299,12 @@ typedef struct {
   uint8_t font_normal_data[256 * 1024];
 } state_t;
 static state_t state;
+
+void font_normal_loaded(const sfetch_response_t* response) {
+  if (response->fetched) {
+    state.font_normal = fonsAddFontMem(state.fons, "sans", (void*)response->data.ptr, (int)response->data.size,  false);
+  }
+}
 #+end_src
 
 
@@ -316,12 +367,6 @@ enum {Success,Failure,NotUnicode};
 <<handle_event>>
 <<display_state>>
 
-void font_normal_loaded(const sfetch_response_t* response) {
-  if (response->fetched) {
-    state.font_normal = fonsAddFontMem(state.fons, "sans", (void*)response->data.ptr, (int)response->data.size,  false);
-  }
-}
-
 /* round to next power of 2 (see bit-twiddling-hacks) */
 int round_pow2(float v) {
     uint32_t vi = ((uint32_t) v) - 1;
@@ -331,44 +376,8 @@ int round_pow2(float v) {
     return (int) (vi + 1);
 }
 
-static void init(void) {
-  create_buffer(str("*scratch*"));
-  set_current_buffer(str("*scratch*"));
+<<init>>
 
-  state.dpi_scale = sapp_dpi_scale();
-    sg_setup(&(sg_desc){
-        .context = sapp_sgcontext(),
-        .logger.func = slog_func,
-    });
-    __dbgui_setup(sapp_sample_count());
-    sgl_setup(&(sgl_desc_t){
-        .logger.func = slog_func
-    });
-
-    /* make sure the fontstash atlas width/height is pow-2 */
-    const int atlas_dim = round_pow2(512.0f * state.dpi_scale);
-    FONScontext* fons_context = sfons_create(&(sfons_desc_t){
-        .width = atlas_dim,
-        .height = atlas_dim,
-    });
-    state.fons = fons_context;
-    state.font_normal = FONS_INVALID;
-    state.font_italic = FONS_INVALID;
-    state.font_bold = FONS_INVALID;
-
-    /* use sokol_fetch for loading the TTF font files */
-    sfetch_setup(&(sfetch_desc_t){
-        .num_channels = 1,
-        .num_lanes = 4,
-        .logger.func = slog_func,
-    });
-    char path_buf[512];
-    sfetch_send(&(sfetch_request_t){
-        .path = "/Users/guido/Library/Fonts/MinionPro-Regular.otf",
-        .callback = font_normal_loaded,
-        .buffer = SFETCH_RANGE(state.font_normal_data),
-    });
-}
 
 static void line(float sx, float sy, float ex, float ey)
 {
