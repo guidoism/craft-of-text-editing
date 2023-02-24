@@ -155,12 +155,7 @@ static void init(void) {
 
   // make sure the fontstash atlas width/height is pow-2
   const int atlas_dim = round_pow2(512.0f * state.dpi_scale);
-  FONScontext* fons_context = sfons_create(&(sfons_desc_t){
-      .width = atlas_dim,
-      .height = atlas_dim,
-  });
-  
-  state.fons = fons_context;
+  state.fons = sfons_create(&(sfons_desc_t){.width = atlas_dim, .height = atlas_dim,});
   state.font_normal = FONS_INVALID;
   state.font_italic = FONS_INVALID;
   state.font_bold = FONS_INVALID;
