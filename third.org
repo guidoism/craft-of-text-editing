@@ -241,6 +241,22 @@ void handle_event(const sapp_event* event) {
 }
 #+end_src
 
+** Display
+
+#+name: display_state
+#+begin_src c
+typedef struct {
+  FONScontext* fons;
+  float dpi_scale;
+  int font_normal;
+  int font_italic;
+  int font_bold;
+  uint8_t font_normal_data[256 * 1024];
+} state_t;
+static state_t state;
+#+end_src
+
+
 ** TextMode vs Graphics
 
 Using Sokol, to build:
@@ -298,16 +314,7 @@ enum {Success,Failure,NotUnicode};
 <<create_buffer>>
 <<insert_char>>
 <<handle_event>>
-
-typedef struct {
-  FONScontext* fons;
-  float dpi_scale;
-  int font_normal;
-  int font_italic;
-  int font_bold;
-  uint8_t font_normal_data[256 * 1024];
-} state_t;
-static state_t state;
+<<display_state>>
 
 void font_normal_loaded(const sfetch_response_t* response) {
   if (response->fetched) {
