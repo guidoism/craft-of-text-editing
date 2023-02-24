@@ -156,9 +156,8 @@ static void init(void) {
   // make sure the fontstash atlas width/height is pow-2
   const int atlas_dim = round_pow2(512.0f * state.dpi_scale);
   state.fons = sfons_create(&(sfons_desc_t){.width = atlas_dim, .height = atlas_dim});
+  state.font_mono = FONS_INVALID;
   state.font_normal = FONS_INVALID;
-  state.font_italic = FONS_INVALID;
-  state.font_bold = FONS_INVALID;
 
   <<load_fonts>>
 }
@@ -174,19 +173,36 @@ static void init(void) {
       .num_lanes = 4,
       .logger.func = slog_func,
   });
-  char path_buf[512];
   sfetch_send(&(sfetch_request_t){
       .path = "/Users/guido/Library/Fonts/MinionPro-Regular.otf",
       .callback = font_normal_loaded,
       .buffer = SFETCH_RANGE(state.font_normal_data),
+  });
+  sfetch_send(&(sfetch_request_t){
+      .path = "/Users/guido/Library/Fonts/Hack Regular Nerd Font Complete.ttf",
+      .callback = font_mono_loaded,
+      .buffer = SFETCH_RANGE(state.font_mono_data),
   });
 #+end_src
 
 
 #+name: save_font_data
 #+begin_src c
-void font_normal_loaded(const sfetch_response_t* response) {
+void font_mono_loaded(const sfetch_response_t* response) {
+  printf("Loading mono\n");
   if (response->fetched) {
+    printf("Loaded mono\n");
+    state.font_mono = fonsAddFontMem(state.fons, "mono", (void*)response->data.ptr, (int)response->data.size,  false);
+  }
+  else if (response->failed) {
+    printf("Loading mono failed: %d\n", response->error_code);
+  }
+}
+
+void font_normal_loaded(const sfetch_response_t* response) {
+  printf("Loading normal\n");
+  if (response->fetched) {
+    printf("Loaded normal\n");
     state.font_normal = fonsAddFontMem(state.fons, "sans", (void*)response->data.ptr, (int)response->data.size,  false);
   }
 }
@@ -219,9 +235,9 @@ void handle_event(const sapp_event* event) {
 typedef struct {
   FONScontext* fons;
   float dpi_scale;
+  int font_mono;
   int font_normal;
-  int font_italic;
-  int font_bold;
+  uint8_t font_mono_data[16 * 256 * 1024];
   uint8_t font_normal_data[256 * 1024];
 } state_t;
 static state_t state;
@@ -258,8 +274,11 @@ static void draw_frame(void) {
   fonsSetColor(fs, white);
   dx = fonsDrawText(fs, dx, dy, str, NULL);
 
-  // GUIDO
+  // Draw status line
   line(0, sapp_heightf()-100, sapp_widthf(), sapp_heightf()-100);
+  fonsSetFont(fs, state.font_mono);
+  fonsSetSize(fs, 48.0f*dpis);
+  dx = fonsDrawText(fs, 0, sapp_heightf()-24, "U:**-  *scratch*  0% (0,0)", NULL);
   
   // flush fontstash's font atlas to sokol-gfx texture
   sfons_flush(fs);
