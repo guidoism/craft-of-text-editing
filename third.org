@@ -120,7 +120,7 @@ the character being inserted.
 
 #+name: insert_char
 #+begin_src c
-Status insert_char(u21 ch) {
+Status insert_char(u32 ch) {
   u8 * b = buffers[current_buffer_id].contents;
   u64 loc = buffers[current_buffer_id].point;
   printf("Inserting %d to location %llu\n", ch, loc);
@@ -147,7 +147,7 @@ String str(const char * x) {
   return y;
 }
 
-u8 to_utf8(u8 * buf, u21 ch)
+u8 to_utf8(u8 * buf, u32 ch)
 {
     if (ch <= 0x7F) {
         buf[0] = ch;
@@ -203,7 +203,7 @@ typedef struct Cons {
 typedef struct Cell {
   union {
     i64  n;
-    u21  c; // unicode codepoint
+    u32  c; // unicode codepoint
     //Slug s;
     Cons p;
   } 
@@ -284,7 +284,6 @@ cc cube-sapp.c ../libs/sokol/sokol.m -o cube-sapp -DSOKOL_METAL -fobjc-arc -I../
 #include <stdlib.h>
 typedef uint8_t u8;
 typedef uint16_t u16;
-typedef uint32_t u21; // unicode code point, only use 21 bits
 typedef uint32_t u32;
 typedef int64_t i64;
 typedef uint64_t u64;
