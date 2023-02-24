@@ -135,89 +135,6 @@ Status insert_char(u32 ch) {
 }
 #+end_src
 
-*** Unicode Helpers
-
-#+name: unicode_helpers
-#+begin_src c
-typedef struct String { u8 len; u8 s[64]; } String;
-String str(const char * x) {
-  // TODO: assert string length
-  String y = {.len=sizeof(x)};
-  memcpy(y.s, x, y.len);
-  return y;
-}
-
-u8 to_utf8(u8 * buf, u32 ch)
-{
-    if (ch <= 0x7F) {
-        buf[0] = ch;
-        return 1;
-    }
-    if (ch <= 0x7FF) {
-        buf[0] = 0xC0 | (ch >> 6);            /* 110xxxxx */
-        buf[1] = 0x80 | (ch & 0x3F);          /* 10xxxxxx */
-        return 2;
-    }
-    if (ch <= 0xFFFF) {
-        buf[0] = 0xE0 | (ch >> 12);           /* 1110xxxx */
-        buf[1] = 0x80 | ((ch >> 6) & 0x3F);   /* 10xxxxxx */
-        buf[2] = 0x80 | (ch & 0x3F);          /* 10xxxxxx */
-        return 3;
-    }
-    if (ch <= 0x10FFFF) {
-        buf[0] = 0xF0 | (ch >> 18);           /* 11110xxx */
-        buf[1] = 0x80 | ((ch >> 12) & 0x3F);  /* 10xxxxxx */
-        buf[2] = 0x80 | ((ch >> 6) & 0x3F);   /* 10xxxxxx */
-        buf[3] = 0x80 | (ch & 0x3F);          /* 10xxxxxx */
-        return 4;
-    }
-    return 0;
-}
-#+end_src
-
-
-** Extensions
-*** Lisp Nodes
-
-The classic C implementation of a Lisp node is an implicit tagged
-union of the native word size where the lower 3 bits of a pointer tag
-the data that it points to and structs in the array-of-structs style.
-
-The modern style is for a struct-of-arrays where we have large
-contiguous swaths of identially typed data. We are going to assume a
-64 bit native word size here for simplicity. I can think of no good
-reason to make this program optimized for other word sizes. If it is
-then the hypothetical 32-bit word size advocate is encouraged to fork
-this codebase.
-
-A block of 64 cells (4096 bytes) is a natural point of segmentation.
-This allows flags for all 64 cells to each fit into a single 64 bit
-word.
-
-#+begin_src c
-typedef struct Cons {
-  u32 car;
-  u32 cde;
-} Cons;
-
-typedef struct Cell {
-  union {
-    i64  n;
-    u32  c; // unicode codepoint
-    //Slug s;
-    Cons p;
-  } 
-} Cell;
-
-enum Tag {Number, Character, Slug, ConsPair};
-
-Tag  tags[4096];
-Cell cells[4096];
-#+end_src
-
-
-
-
 ** Events
 
 Now we move on to the human scale. This is where we react to keys
@@ -459,6 +376,86 @@ sapp_desc sokol_main(int argc, char* argv[]) {
     .logger.func = slog_func,
   };
 }
+#+end_src
+
+*** Unicode Helpers
+
+#+name: unicode_helpers
+#+begin_src c
+typedef struct String { u8 len; u8 s[64]; } String;
+String str(const char * x) {
+  // TODO: assert string length
+  String y = {.len=sizeof(x)};
+  memcpy(y.s, x, y.len);
+  return y;
+}
+
+u8 to_utf8(u8 * buf, u32 ch)
+{
+    if (ch <= 0x7F) {
+        buf[0] = ch;
+        return 1;
+    }
+    if (ch <= 0x7FF) {
+        buf[0] = 0xC0 | (ch >> 6);            /* 110xxxxx */
+        buf[1] = 0x80 | (ch & 0x3F);          /* 10xxxxxx */
+        return 2;
+    }
+    if (ch <= 0xFFFF) {
+        buf[0] = 0xE0 | (ch >> 12);           /* 1110xxxx */
+        buf[1] = 0x80 | ((ch >> 6) & 0x3F);   /* 10xxxxxx */
+        buf[2] = 0x80 | (ch & 0x3F);          /* 10xxxxxx */
+        return 3;
+    }
+    if (ch <= 0x10FFFF) {
+        buf[0] = 0xF0 | (ch >> 18);           /* 11110xxx */
+        buf[1] = 0x80 | ((ch >> 12) & 0x3F);  /* 10xxxxxx */
+        buf[2] = 0x80 | ((ch >> 6) & 0x3F);   /* 10xxxxxx */
+        buf[3] = 0x80 | (ch & 0x3F);          /* 10xxxxxx */
+        return 4;
+    }
+    return 0;
+}
+#+end_src
+
+
+** Extensions
+*** Lisp Nodes
+
+The classic C implementation of a Lisp node is an implicit tagged
+union of the native word size where the lower 3 bits of a pointer tag
+the data that it points to and structs in the array-of-structs style.
+
+The modern style is for a struct-of-arrays where we have large
+contiguous swaths of identially typed data. We are going to assume a
+64 bit native word size here for simplicity. I can think of no good
+reason to make this program optimized for other word sizes. If it is
+then the hypothetical 32-bit word size advocate is encouraged to fork
+this codebase.
+
+A block of 64 cells (4096 bytes) is a natural point of segmentation.
+This allows flags for all 64 cells to each fit into a single 64 bit
+word.
+
+#+begin_src c
+typedef struct Cons {
+  u32 car;
+  u32 cde;
+} Cons;
+
+typedef struct Cell {
+  union {
+    i64  n;
+    u32  c; // unicode codepoint
+    //Slug s;
+    Cons p;
+  } 
+} Cell;
+
+enum Tag {Number, Character, Slug, ConsPair};
+
+Tag  tags[4096];
+Cell cells[4096];
 #+end_src
 
 ** Stupid Ideas
