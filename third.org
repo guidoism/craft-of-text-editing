@@ -140,6 +140,8 @@ Status insert_char(u32 ch) {
 Now we move on to the human scale. This is where we react to keys
 being pressed or being told that we need to re-draw the display.
 
+*** Initialize Everything
+
 #+name: init
 #+begin_src c :noweb yes
 static void init(void) {
@@ -168,7 +170,7 @@ static void init(void) {
 
 #+end_src
 
-** Load Fonts
+*** Load Fonts
 
 #+name: load_fonts
 #+begin_src c
