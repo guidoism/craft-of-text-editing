@@ -302,7 +302,6 @@ cc cube-sapp.c ../libs/sokol/sokol.m -o cube-sapp -DSOKOL_METAL -fobjc-arc -I../
 #define SOKOL_FONTSTASH_IMPL
 #include "sokol_fontstash.h"
 #include "dbgui/dbgui.h"
-//#include "util/fileutil.h"
 
 
 #include <stdint.h>
