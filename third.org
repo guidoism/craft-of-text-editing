@@ -461,24 +461,7 @@ sapp_desc sokol_main(int argc, char* argv[]) {
     .logger.func = slog_func,
   };
 }
-
-
 #+end_src
-
-
-#+begin_src sh
-clang build/third-sokol.c experiments/sokol.m \
-   -o build/third-sokol -DSOKOL_METAL \
-   -fobjc-arc -Iexperiments/ \
-   -framework Metal \
-   -framework Cocoa \
-   -framework MetalKit \
-   -framework Quartz \
-   -framework AudioToolbox
-#+end_src
-
-#+RESULTS:
-
 
 ** Stupid Ideas
 
