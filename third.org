@@ -141,7 +141,7 @@ Now we move on to the human scale. This is where we react to keys
 being pressed or being told that we need to re-draw the display.
 
 #+name: init
-#+begin_src c
+#+begin_src c :noweb yes
 static void init(void) {
   create_buffer(str("*scratch*"));
   set_current_buffer(str("*scratch*"));
@@ -163,6 +163,15 @@ static void init(void) {
   state.font_italic = FONS_INVALID;
   state.font_bold = FONS_INVALID;
 
+  <<load_fonts>>
+}
+
+#+end_src
+
+** Load Fonts
+
+#+name: load_fonts
+#+begin_src c
   sfetch_setup(&(sfetch_desc_t){
       .num_channels = 1,
       .num_lanes = 4,
@@ -174,9 +183,17 @@ static void init(void) {
       .callback = font_normal_loaded,
       .buffer = SFETCH_RANGE(state.font_normal_data),
   });
-}
 #+end_src
 
+
+#+name: save_font_data
+#+begin_src c
+void font_normal_loaded(const sfetch_response_t* response) {
+  if (response->fetched) {
+    state.font_normal = fonsAddFontMem(state.fons, "sans", (void*)response->data.ptr, (int)response->data.size,  false);
+  }
+}
+#+end_src
 
 
 *** Handle Event
@@ -211,12 +228,6 @@ typedef struct {
   uint8_t font_normal_data[256 * 1024];
 } state_t;
 static state_t state;
-
-void font_normal_loaded(const sfetch_response_t* response) {
-  if (response->fetched) {
-    state.font_normal = fonsAddFontMem(state.fons, "sans", (void*)response->data.ptr, (int)response->data.size,  false);
-  }
-}
 #+end_src
 
 *** Draw Frame
@@ -323,6 +334,7 @@ enum {Success,Failure,NotUnicode};
 <<insert_char>>
 <<handle_event>>
 <<display_state>>
+<<save_font_data>>
 
 /* round to next power of 2 (see bit-twiddling-hacks) */
 int round_pow2(float v) {
