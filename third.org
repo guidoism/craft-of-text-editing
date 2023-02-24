@@ -311,26 +311,26 @@ typedef struct {
 } state_t;
 static state_t state;
 
-static void font_normal_loaded(const sfetch_response_t* response) {
+void font_normal_loaded(const sfetch_response_t* response) {
     if (response->fetched) {
         state.font_normal = fonsAddFontMem(state.fons, "sans", (void*)response->data.ptr, (int)response->data.size,  false);
     }
 }
 
-static void font_italic_loaded(const sfetch_response_t* response) {
+void font_italic_loaded(const sfetch_response_t* response) {
     if (response->fetched) {
         state.font_italic = fonsAddFontMem(state.fons, "sans-italic", (void*)response->data.ptr, (int)response->data.size, false);
     }
 }
 
-static void font_bold_loaded(const sfetch_response_t* response) {
+void font_bold_loaded(const sfetch_response_t* response) {
     if (response->fetched) {
         state.font_bold = fonsAddFontMem(state.fons, "sans-bold", (void*)response->data.ptr, (int)response->data.size, false);
     }
 }
 
 /* round to next power of 2 (see bit-twiddling-hacks) */
-static int round_pow2(float v) {
+int round_pow2(float v) {
     uint32_t vi = ((uint32_t) v) - 1;
     for (uint32_t i = 0; i < 5; i++) {
         vi |= (vi >> (1<<i));
