@@ -175,55 +175,6 @@ u8 to_utf8(u8 * buf, u21 ch)
 }
 #+end_src
 
-** Display
-
-#+name: redisplay
-#+begin_src c
-Status redisplay(void) {
-  printf("Buffer: %s\n", buffers[current_buffer_id].contents);
-  return Success;
-}
-#+end_src
-
-** Setup
-
-#+name: typedefs
-#+begin_src c :tangle build/third.c :noweb yes
-#include <stdint.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-typedef uint8_t u8;
-typedef uint16_t u16;
-typedef uint32_t u21; // unicode code point, only use 21 bits
-typedef uint32_t u32;
-typedef int64_t i64;
-typedef uint64_t u64;
-typedef uint8_t Status;
-typedef uint16_t BufferId;
-//typedef char[8] Slug; // a short string (≤ 8 bytes)
-
-enum {Success,Failure,NotUnicode};
-
-<<unicode_helpers>>
-<<buffer_representation>>
-<<create_buffer>>
-<<insert_char>>
-<<redisplay>>
-
-int main(void) {
-  create_buffer(str("*scratch*"));
-  set_current_buffer(str("*scratch*"));
-  insert_char('g');
-  insert_char('u');
-  insert_char('i');
-  insert_char('d');
-  insert_char('o');
-  redisplay();
-  return 0;
-}
-
-#+end_src
 
 ** Extensions
 *** Lisp Nodes
@@ -323,18 +274,16 @@ enum {Success,Failure,NotUnicode};
 <<buffer_representation>>
 <<create_buffer>>
 <<insert_char>>
-<<redisplay>>
 
-int mymain(void) {
-  create_buffer(str("*scratch*"));
-  set_current_buffer(str("*scratch*"));
-  insert_char('g');
-  insert_char('u');
-  insert_char('i');
-  insert_char('d');
-  insert_char('o');
-  redisplay();
-  return 0;
+void event(const sapp_event* event) {
+  // SAPP_EVENTTYPE_KEY_DOWN
+  // SAPP_EVENTTYPE_KEY_UP
+  if (event->type == SAPP_EVENTTYPE_CHAR) {
+    insert_char(event->char_code);
+    // bool key_repeat;
+    // uint32_t modifiers;
+
+  }
 }
 
 typedef struct {
@@ -377,7 +326,10 @@ static int round_pow2(float v) {
 }
 
 static void init(void) {
-    state.dpi_scale = sapp_dpi_scale();
+  create_buffer(str("*scratch*"));
+  set_current_buffer(str("*scratch*"));
+
+  state.dpi_scale = sapp_dpi_scale();
     sg_setup(&(sg_desc){
         .context = sapp_sgcontext(),
         .logger.func = slog_func,
@@ -432,6 +384,8 @@ static void line(float sx, float sy, float ex, float ey)
 }
 
 static void frame(void) {
+  const char * str = (const char *)buffers[current_buffer_id].contents;
+  
     const float dpis = state.dpi_scale;
 
     /* pump sokol_fetch message queues */
@@ -460,7 +414,7 @@ static void frame(void) {
         dx = sx;
         dy += lh;
         fonsSetColor(fs, white);
-        dx = fonsDrawText(fs, dx, dy, "The quick ", NULL);
+        dx = fonsDrawText(fs, dx, dy, str, NULL);
     }
 
     /* flush fontstash's font atlas to sokol-gfx texture */
@@ -493,7 +447,8 @@ sapp_desc sokol_main(int argc, char* argv[]) {
         .init_cb = init,
         .frame_cb = frame,
         .cleanup_cb = cleanup,
-        .event_cb = __dbgui_event,
+        //.event_cb = __dbgui_event,
+        .event_cb = event,
         .width = 800,
         .height = 600,
         .high_dpi = true,
