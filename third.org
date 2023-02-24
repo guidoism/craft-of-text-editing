@@ -307,6 +307,53 @@ void font_normal_loaded(const sfetch_response_t* response) {
 }
 #+end_src
 
+*** Draw Frame
+
+#+name: draw_frame
+#+begin_src c
+static void draw_frame(void) {
+  const char * str = (const char *)buffers[current_buffer_id].contents;
+  const float dpis = state.dpi_scale;
+
+  // pump sokol_fetch message queues (GUIDO: why?)
+  sfetch_dowork();
+
+  float sx, sy, dx, dy, lh = 0.0f;
+  uint32_t white = sfons_rgba(255, 255, 255, 255);
+  fonsClearState(state.fons);
+
+  sgl_defaults();
+  sgl_matrix_mode_projection();
+  sgl_ortho(0.0f, sapp_widthf(), sapp_heightf(), 0.0f, -1.0f, +1.0f);
+
+  sx = 50*dpis; sy = 50*dpis;
+  dx = sx; dy = sy;
+
+  FONScontext* fs = state.fons;
+  fonsSetFont(fs, state.font_normal);
+  fonsSetSize(fs, 124.0f*dpis);
+  fonsVertMetrics(fs, NULL, NULL, &lh);
+  dx = sx;
+  dy += lh;
+  fonsSetColor(fs, white);
+  dx = fonsDrawText(fs, dx, dy, str, NULL);
+
+  // flush fontstash's font atlas to sokol-gfx texture
+  sfons_flush(fs);
+
+  // render pass
+  sg_begin_default_pass(&(sg_pass_action){
+      .colors[0] = {
+        .action = SG_ACTION_CLEAR, .value = { 0.3f, 0.3f, 0.32f, 1.0f }
+      }
+    }, sapp_width(), sapp_height());
+  sgl_draw();
+  __dbgui_draw();
+  sg_end_pass();
+  sg_commit();
+}
+#+end_src
+
 
 ** TextMode vs Graphics
 
@@ -377,7 +424,7 @@ int round_pow2(float v) {
 }
 
 <<init>>
-
+<<draw_frame>>
 
 static void line(float sx, float sy, float ex, float ey)
 {
@@ -388,47 +435,6 @@ static void line(float sx, float sy, float ex, float ey)
   sgl_end();
 }
 
-static void frame(void) {
-  const char * str = (const char *)buffers[current_buffer_id].contents;
-  const float dpis = state.dpi_scale;
-
-  // pump sokol_fetch message queues (GUIDO: why?)
-  sfetch_dowork();
-
-  float sx, sy, dx, dy, lh = 0.0f;
-  uint32_t white = sfons_rgba(255, 255, 255, 255);
-  fonsClearState(state.fons);
-
-  sgl_defaults();
-  sgl_matrix_mode_projection();
-  sgl_ortho(0.0f, sapp_widthf(), sapp_heightf(), 0.0f, -1.0f, +1.0f);
-
-  sx = 50*dpis; sy = 50*dpis;
-  dx = sx; dy = sy;
-
-  FONScontext* fs = state.fons;
-  fonsSetFont(fs, state.font_normal);
-  fonsSetSize(fs, 124.0f*dpis);
-  fonsVertMetrics(fs, NULL, NULL, &lh);
-  dx = sx;
-  dy += lh;
-  fonsSetColor(fs, white);
-  dx = fonsDrawText(fs, dx, dy, str, NULL);
-
-  // flush fontstash's font atlas to sokol-gfx texture
-  sfons_flush(fs);
-
-  // render pass
-  sg_begin_default_pass(&(sg_pass_action){
-      .colors[0] = {
-        .action = SG_ACTION_CLEAR, .value = { 0.3f, 0.3f, 0.32f, 1.0f }
-      }
-    }, sapp_width(), sapp_height());
-  sgl_draw();
-  __dbgui_draw();
-  sg_end_pass();
-  sg_commit();
-}
 
 static void cleanup(void) {
   __dbgui_shutdown();
@@ -443,7 +449,7 @@ sapp_desc sokol_main(int argc, char* argv[]) {
   (void)argv;
   return (sapp_desc) {
     .init_cb = init,
-    .frame_cb = frame,
+    .frame_cb = draw_frame,
     .cleanup_cb = cleanup,
     //.event_cb = __dbgui_event,
     .event_cb = handle_event,
