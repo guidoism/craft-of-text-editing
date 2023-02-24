@@ -258,6 +258,9 @@ static void draw_frame(void) {
   fonsSetColor(fs, white);
   dx = fonsDrawText(fs, dx, dy, str, NULL);
 
+  // GUIDO
+  line(0, sapp_heightf()-100, sapp_widthf(), sapp_heightf()-100);
+  
   // flush fontstash's font atlas to sokol-gfx texture
   sfons_flush(fs);
 
@@ -342,20 +345,19 @@ int round_pow2(float v) {
     return (int) (vi + 1);
 }
 
-<<init>>
-<<draw_frame>>
-
-static void line(float sx, float sy, float ex, float ey)
+void line(float sx, float sy, float ex, float ey)
 {
   sgl_begin_lines();
-  sgl_c4b(255, 255, 0, 128);
+  sgl_c4b(255, 255, 255, 128);
   sgl_v2f(sx, sy);
   sgl_v2f(ex, ey);
   sgl_end();
 }
 
+<<init>>
+<<draw_frame>>
 
-static void cleanup(void) {
+void cleanup(void) {
   __dbgui_shutdown();
   sfetch_shutdown();
   sfons_destroy(state.fons);
