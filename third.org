@@ -147,38 +147,33 @@ static void init(void) {
   set_current_buffer(str("*scratch*"));
 
   state.dpi_scale = sapp_dpi_scale();
-    sg_setup(&(sg_desc){
-        .context = sapp_sgcontext(),
-        .logger.func = slog_func,
-    });
-    __dbgui_setup(sapp_sample_count());
-    sgl_setup(&(sgl_desc_t){
-        .logger.func = slog_func
-    });
+  sg_setup(&(sg_desc){.context = sapp_sgcontext(), .logger.func = slog_func,});
+  __dbgui_setup(sapp_sample_count());
+  sgl_setup(&(sgl_desc_t){.logger.func = slog_func});
 
-    /* make sure the fontstash atlas width/height is pow-2 */
-    const int atlas_dim = round_pow2(512.0f * state.dpi_scale);
-    FONScontext* fons_context = sfons_create(&(sfons_desc_t){
-        .width = atlas_dim,
-        .height = atlas_dim,
-    });
-    state.fons = fons_context;
-    state.font_normal = FONS_INVALID;
-    state.font_italic = FONS_INVALID;
-    state.font_bold = FONS_INVALID;
+  // make sure the fontstash atlas width/height is pow-2
+  const int atlas_dim = round_pow2(512.0f * state.dpi_scale);
+  FONScontext* fons_context = sfons_create(&(sfons_desc_t){
+      .width = atlas_dim,
+      .height = atlas_dim,
+  });
+  
+  state.fons = fons_context;
+  state.font_normal = FONS_INVALID;
+  state.font_italic = FONS_INVALID;
+  state.font_bold = FONS_INVALID;
 
-    /* use sokol_fetch for loading the TTF font files */
-    sfetch_setup(&(sfetch_desc_t){
-        .num_channels = 1,
-        .num_lanes = 4,
-        .logger.func = slog_func,
-    });
-    char path_buf[512];
-    sfetch_send(&(sfetch_request_t){
-        .path = "/Users/guido/Library/Fonts/MinionPro-Regular.otf",
-        .callback = font_normal_loaded,
-        .buffer = SFETCH_RANGE(state.font_normal_data),
-    });
+  sfetch_setup(&(sfetch_desc_t){
+      .num_channels = 1,
+      .num_lanes = 4,
+      .logger.func = slog_func,
+  });
+  char path_buf[512];
+  sfetch_send(&(sfetch_request_t){
+      .path = "/Users/guido/Library/Fonts/MinionPro-Regular.otf",
+      .callback = font_normal_loaded,
+      .buffer = SFETCH_RANGE(state.font_normal_data),
+  });
 }
 #+end_src
 
