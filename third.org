@@ -85,10 +85,10 @@ In the actual implementation they use Gap Buffers. A buffer
 initial starts off all gap, the first part is 0 length at
 the beginning and the second part is 0 length at the end.
 
-**** Naive Buffer
+**** Naïve Buffer
 
 Before we implement the more complex gap buffer we will
-implement the most naive form of buffer. Just a flat piece
+implement the most naïve form of buffer. Just a flat piece
 of memory that comes from malloc. We move everything after
 the insertion point with ~memmove~ during each edit.
 
@@ -286,6 +286,14 @@ typedef struct Window {
   <<window_additions>>
 } Window;
 #+end_src
+
+Now we need to determine which location in the buffer represents the
+first character of the first line in our window. The naïve approach is
+what we will do first. Let's just typeset everything from the
+beginning of the buffer until our current location. We can cache hints
+later on to make this process not so cumbersome.
+
+
 
 
 
