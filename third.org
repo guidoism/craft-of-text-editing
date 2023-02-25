@@ -1,6 +1,35 @@
-This text editor is essentially just a SECD machine optimized for
-representing buffers of text in a format that is useful for editing
-operations and typesetting it to a display.
+This is a text editor in the style of Emacs. It has been written
+from scratch in a literate form with help from Craig A. Finseth's
+book [[https://www.finseth.com/craft/][The Craft of Text Editing --or-- Emacs for the Modern World]].
+
+Our motivation is to be able to learn how a actually-usable non-toy
+text editor works by reading the source code and commentary in a
+narrative fashion. At certain points along the way we will have a
+working editor that can be tangled, compiled, and run. Over time
+certain parts will be enhanced or replaced with something more
+advanced. The intent is for the reader take a bit at a time and not
+forced to choose between either grokking whole complexity all at one
+or seeing non-working toy parts.
+
+We will start with a discussion and definition of buffers as this is a
+foundational concept in Emacs. We will turn this simple buffer into an
+editor by adding: 1. The ability to add a character to the buffer one
+at a time, 2. The ability to transform the buffer into something that
+can be seen, and 3. The ability to read in input from the user.
+
+Next we will turn out editor into something that takes control of the
+whole screen by using [[https://github.com/floooh/sokol][Sokol]] to provide cross-platform access to the
+graphical display subsystems of our operating system.
+
+At this point we know have full control over our display so we can
+add the following features:
+
+- Typeset characters in their proper place
+- Add a status bar to the bottom
+- Make a cursor
+
+Later we will: 
+
 
 ** Buffers
 
