@@ -290,10 +290,30 @@ typedef struct Window {
 Now we need to determine which location in the buffer represents the
 first character of the first line in our window. The naïve approach is
 what we will do first. Let's just typeset everything from the
-beginning of the buffer until our current location. We can cache hints
-later on to make this process not so cumbersome.
+beginning of the buffer until our current location. Actually, it's
+simpler than that. We just need to keep track of the locations in the
+buffer that represent the beginnings of lines.
 
+- [ ] TODO: It would be cool to be able to show the outside of the buffer struct sorta dimed giving the new code here some context
+- [ ] TODO: We should also allow you to click on a snippet and see it all merged together
 
+#+name: buffer_additions
+#+begin_src c
+u64 line_count;
+u64 * line_starts;
+#+end_src
+
+#+name: create_buffer_additions
+#+begin_src c
+b->line_starts = malloc(4096*sizeof(u64));
+#+end_src
+
+#+name: calculate_line_starts
+#+begin_src c
+for (u64 i = 0; i < b->length; i++) {
+  
+}
+#+end_src
 
 
 
@@ -558,7 +578,6 @@ Cell cells[4096];
 - When loading a file we can write out the text pretty quickly into a
   block of cells and then write out the car/cdr parts in a different
   part of the block all at once.
-
 
 ** Questions
 
