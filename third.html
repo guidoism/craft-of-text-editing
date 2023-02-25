@@ -1,0 +1,1169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2023-02-25 Sat 14:16 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lrm;</title>
+<meta name="author" content="Guido Bartolucci" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="stylesheet" type="text/css" href="plaintexcss.css" />
+</head>
+<body>
+<div id="content" class="content">
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org099b3fa">1. Buffers</a>
+<ul>
+<li><a href="#org91ea394">1.1. Buffer Representation</a>
+<ul>
+<li><a href="#org4fb89b3">1.1.1. Gap Buffers</a></li>
+<li><a href="#orgda9f995">1.1.2. Naïve Buffer</a></li>
+</ul>
+</li>
+<li><a href="#orgbcb1df7">1.2. Create a new buffer</a></li>
+<li><a href="#orgce1ebae">1.3. Insert a character</a></li>
+</ul>
+</li>
+<li><a href="#orgc160d77">2. Events</a>
+<ul>
+<li><a href="#org7e1e06f">2.1. Initialize Everything</a></li>
+<li><a href="#orgcee8680">2.2. Load Fonts</a></li>
+<li><a href="#orgdeb1819">2.3. Handle Event</a></li>
+</ul>
+</li>
+<li><a href="#org88405ca">3. Display</a>
+<ul>
+<li><a href="#org40ba986">3.1. Typeset Buffer</a></li>
+<li><a href="#org12da4f4">3.2. Display State</a></li>
+<li><a href="#orgafe7ad7">3.3. Draw Frame</a></li>
+</ul>
+</li>
+<li><a href="#orgb587aa5">4. TextMode vs Graphics</a>
+<ul>
+<li><a href="#orgfead18b">4.1. Unicode Helpers</a></li>
+</ul>
+</li>
+<li><a href="#orgc77a0b8">5. Extensions</a>
+<ul>
+<li><a href="#org82d653e">5.1. Lisp Nodes</a></li>
+</ul>
+</li>
+<li><a href="#org597dd8c">6. Stupid Ideas</a></li>
+<li><a href="#orgf6933cd">7. Questions</a></li>
+</ul>
+</div>
+</div>
+<p>
+This is a text editor in the style of Emacs. It has been written
+from scratch in a literate form with help from Craig A. Finseth&rsquo;s
+book <a href="https://www.finseth.com/craft/">The Craft of Text Editing &#x2013;or&#x2013; Emacs for the Modern World</a>.
+</p>
+
+<p>
+Our motivation is to be able to learn how a actually-usable non-toy
+text editor works by reading the source code and commentary in a
+narrative fashion. At certain points along the way we will have a
+working editor that can be tangled, compiled, and run. Over time
+certain parts will be enhanced or replaced with something more
+advanced. The intent is for the reader take a bit at a time and not
+forced to choose between either grokking whole complexity all at one
+or seeing non-working toy parts.
+</p>
+
+<p>
+We will start with a discussion and definition of buffers as this is a
+foundational concept in Emacs. We will turn this simple buffer into an
+editor by adding: 1. The ability to add a character to the buffer one
+at a time, 2. The ability to transform the buffer into something that
+can be seen, and 3. The ability to read in input from the user.
+</p>
+
+<p>
+Next we will turn out editor into something that takes control of the
+whole screen by using <a href="https://github.com/floooh/sokol">Sokol</a> to provide cross-platform access to the
+graphical display subsystems of our operating system.
+</p>
+
+<p>
+At this point we know have full control over our display so we can
+add the following features:
+</p>
+
+<ul class="org-ul">
+<li>Typeset characters in their proper place</li>
+<li>Add a status bar to the bottom</li>
+<li>Make a cursor</li>
+</ul>
+
+<div id="outline-container-org099b3fa" class="outline-2">
+<h2 id="org099b3fa"><span class="section-number-2">1.</span> Buffers</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Everything is a buffer. That statement is not quite true, but it&rsquo;s
+true enough. Files that we edit are loading into a buffer. When we
+start a new file we start with an empty buffer and later bind it to
+and save it to a file. Commands are typed into a (mini-) buffer.
+Background status is stored in buffers. This is the magic that makes
+Emacs so hackable.
+</p>
+
+<p>
+A text file is a one-dimensional representation of a two-dimensional
+document. For example, newlines are control characters that describe
+how to convert the file into the 2d plane of glyphs.
+</p>
+
+<p>
+This is an important point to remember. There&rsquo;s nothing sacred about
+drawing one character at a time, from left to right, and when we get
+to the right of the display wrapping to the next line by moving down
+the glyph height and starting again at the far left and doing the
+same when we reach a newline character instead of drawing it.
+</p>
+
+<p>
+Painting a sequence of glyphs across the screen in a zig-zag is pretty
+universal for text, but the direction you move isn&rsquo;t.
+</p>
+
+<p>
+In fact, we will almost certainly want to visualize a sequence of
+characters in different ways. For example: wrapping long lines vs
+truncation.
+</p>
+
+<p>
+And this brings up another difference, do we want the cursor to move
+around the screen without any regard to the structure of the text
+under it or does &ldquo;move up&rdquo; for example really mean move to the
+previous line at the same column offset? And what happens if the
+previous line is too short and doesn&rsquo;t have that column? And what
+happens if you keep moving up and encounter another line that <i>is</i>
+long enough? 
+</p>
+
+<p>
+Mentally de-coupling the sequence of characters in a buffer with the
+visualization opens up other potential improvements. Maybe we can also
+display a PDF as either the textual format or as the drawn document
+the author intended. Or we could constrain code files to always be
+syntactically correct.
+</p>
+</div>
+
+<div id="outline-container-org91ea394" class="outline-3">
+<h3 id="org91ea394"><span class="section-number-3">1.1.</span> Buffer Representation</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+The choice of data structure for a buffer of text is dependent several
+factors most notably how much text, whether it is full of many short
+lines or few long lines, and whether it will be mostly just read or is
+under active editing.
+</p>
+
+<p>
+We recognized that we don&rsquo;t have to use the same data structure for
+all active buffer nor even the same data structure for the buffer over
+its lifetime.
+</p>
+</div>
+
+<div id="outline-container-org4fb89b3" class="outline-4">
+<h4 id="org4fb89b3"><span class="section-number-4">1.1.1.</span> Gap Buffers</h4>
+<div class="outline-text-4" id="text-1-1-1">
+<p>
+In the actual implementation they use Gap Buffers. A buffer
+initial starts off all gap, the first part is 0 length at
+the beginning and the second part is 0 length at the end.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgda9f995" class="outline-4">
+<h4 id="orgda9f995"><span class="section-number-4">1.1.2.</span> Naïve Buffer</h4>
+<div class="outline-text-4" id="text-1-1-2">
+<p>
+Before we implement the more complex gap buffer we will
+implement the most naïve form of buffer. Just a flat piece
+of memory that comes from malloc. We move everything after
+the insertion point with <code>memmove</code> during each edit.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="orga914262">typedef struct Buffer {
+  BufferId id;
+  String name;
+  u8* contents;
+  u64 length;
+  u64 point;
+  // Mark mark; no need to this quite yet
+  
+} Buffer;
+
+Buffer buffers[64];
+u16 buffers_len;
+BufferId current_buffer_id;
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbcb1df7" class="outline-3">
+<h3 id="orgbcb1df7"><span class="section-number-3">1.2.</span> Create a new buffer</h3>
+<div class="outline-text-3" id="text-1-2">
+<div class="org-src-container">
+<pre class="src src-c" id="orgc958ad2">Status create_buffer(String name) {
+  for (int i = 0; i &lt; buffers_len; i++) {
+    if (memcmp(buffers[i].name.s, name.s, name.len) == 0) {
+      return Failure;
+    }
+  }
+  int i = buffers_len++;
+  Buffer * b = &amp;buffers[i];
+  b-&gt;id = i;
+  b-&gt;name = name;
+  b-&gt;contents = malloc(100);
+  return Success;
+}
+
+Status set_current_buffer(String name) {
+  for (int i = 0; i &lt; buffers_len; i++) {
+    if (memcmp(buffers[i].name.s, name.s, name.len) == 0) {
+      current_buffer_id = i;
+    }
+  }
+  return Failure;
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgce1ebae" class="outline-3">
+<h3 id="orgce1ebae"><span class="section-number-3">1.3.</span> Insert a character</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+Insert the character that has been typed.
+</p>
+
+<p>
+The universal argument is assumed to be the number of times to repeat
+the character being inserted.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="orga3e46fa">Status insert_char(u32 ch) {
+  u8 * b = buffers[current_buffer_id].contents;
+  u64 loc = buffers[current_buffer_id].point;
+  printf("Inserting %d to location %llu\n", ch, loc);
+  u8 enc[4];
+  u8 n = to_utf8(enc, ch);
+  if (n == 0) return NotUnicode;
+  memmove(b+loc+n, b+loc, n);
+  memcpy(b+loc, enc, n);
+  buffers[current_buffer_id].point++;
+  buffers[current_buffer_id].length += n;
+  return Success;
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc160d77" class="outline-2">
+<h2 id="orgc160d77"><span class="section-number-2">2.</span> Events</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Now we move on to the human scale. This is where we react to keys
+being pressed or being told that we need to re-draw the display.
+</p>
+</div>
+
+<div id="outline-container-org7e1e06f" class="outline-3">
+<h3 id="org7e1e06f"><span class="section-number-3">2.1.</span> Initialize Everything</h3>
+<div class="outline-text-3" id="text-2-1">
+<div class="org-src-container">
+<pre class="src src-c" id="org995fdb1">static void init(void) {
+  create_buffer(str("*scratch*"));
+  set_current_buffer(str("*scratch*"));
+
+  state.dpi_scale = sapp_dpi_scale();
+  sg_setup(&amp;(sg_desc){.context = sapp_sgcontext(), .logger.func = slog_func});
+  __dbgui_setup(sapp_sample_count());
+  sgl_setup(&amp;(sgl_desc_t){.logger.func = slog_func});
+
+  // make sure the fontstash atlas width/height is pow-2
+  const int atlas_dim = round_pow2(512.0f * state.dpi_scale);
+  state.fons = sfons_create(&amp;(sfons_desc_t){.width = atlas_dim, .height = atlas_dim});
+  state.font_mono = FONS_INVALID;
+  state.font_normal = FONS_INVALID;
+
+    sfetch_setup(&amp;(sfetch_desc_t){
+        .num_channels = 1,
+        .num_lanes = 4,
+        .logger.func = slog_func,
+    });
+    sfetch_send(&amp;(sfetch_request_t){
+        .path = "/Users/guido/Library/Fonts/MinionPro-Regular.otf",
+        .callback = font_normal_loaded,
+        .buffer = SFETCH_RANGE(state.font_normal_data),
+    });
+    sfetch_send(&amp;(sfetch_request_t){
+        .path = "/Users/guido/Library/Fonts/Hack Regular Nerd Font Complete.ttf",
+        .callback = font_mono_loaded,
+        .buffer = SFETCH_RANGE(state.font_mono_data),
+    });
+}
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgcee8680" class="outline-3">
+<h3 id="orgcee8680"><span class="section-number-3">2.2.</span> Load Fonts</h3>
+<div class="outline-text-3" id="text-2-2">
+<div class="org-src-container">
+<pre class="src src-c" id="org5ad74b3">  sfetch_setup(&amp;(sfetch_desc_t){
+      .num_channels = 1,
+      .num_lanes = 4,
+      .logger.func = slog_func,
+  });
+  sfetch_send(&amp;(sfetch_request_t){
+      .path = "/Users/guido/Library/Fonts/MinionPro-Regular.otf",
+      .callback = font_normal_loaded,
+      .buffer = SFETCH_RANGE(state.font_normal_data),
+  });
+  sfetch_send(&amp;(sfetch_request_t){
+      .path = "/Users/guido/Library/Fonts/Hack Regular Nerd Font Complete.ttf",
+      .callback = font_mono_loaded,
+      .buffer = SFETCH_RANGE(state.font_mono_data),
+  });
+</pre>
+</div>
+
+
+<div class="org-src-container">
+<pre class="src src-c" id="orge60605a">void font_mono_loaded(const sfetch_response_t* response) {
+  printf("Loading mono\n");
+  if (response-&gt;fetched) {
+    printf("Loaded mono\n");
+    state.font_mono = fonsAddFontMem(state.fons, "mono", (void*)response-&gt;data.ptr, (int)response-&gt;data.size,  false);
+  }
+  else if (response-&gt;failed) {
+    printf("Loading mono failed: %d\n", response-&gt;error_code);
+  }
+}
+
+void font_normal_loaded(const sfetch_response_t* response) {
+  printf("Loading normal\n");
+  if (response-&gt;fetched) {
+    printf("Loaded normal\n");
+    state.font_normal = fonsAddFontMem(state.fons, "sans", (void*)response-&gt;data.ptr, (int)response-&gt;data.size,  false);
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgdeb1819" class="outline-3">
+<h3 id="orgdeb1819"><span class="section-number-3">2.3.</span> Handle Event</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+This is what happens when something like a key is pressed or the
+window is re-sized.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="orgb2667a0">void handle_event(const sapp_event* event) {
+  // SAPP_EVENTTYPE_KEY_DOWN
+  // SAPP_EVENTTYPE_KEY_UP
+  if (event-&gt;type == SAPP_EVENTTYPE_CHAR) {
+    insert_char(event-&gt;char_code);
+    // bool key_repeat;
+    // uint32_t modifiers;
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org88405ca" class="outline-2">
+<h2 id="org88405ca"><span class="section-number-2">3.</span> Display</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-org40ba986" class="outline-3">
+<h3 id="org40ba986"><span class="section-number-3">3.1.</span> Typeset Buffer</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+This is where we translate the one-dimensional buffer into our
+two-dimensional display. In anticipation of the later addition of
+&ldquo;windows&rdquo; we will provide the ability to typeset a buffer into any
+size. We will go ahead an call the display a window for now. In fact,
+it makes sense to think of a window as a view into the buffer. You
+aren&rsquo;t necessarily going to see the whole thing.
+</p>
+
+<p>
+If the buffer typesets into something smaller than the window then our
+job is very easy. It gets more complicated when we have to figure out
+where to place the point and then determine how far back to start
+from.
+</p>
+
+<p>
+Let&rsquo;s try to describe the typesetting algorithm for a large buffer
+and then see if that also solves our simple case.
+</p>
+
+<p>
+The point is obviously kept as part as an index into the buffer. It&rsquo;s
+also something visual, a cursor that has a location in the window.
+This relationship must be the heart of our algorithm. Let&rsquo;s start
+by defining our Window type.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c" id="orgaeeb81b">typedef struct Window {
+  u16_pair size_in_pixels;  // in pixels
+  u16_pair size_in_chars;   // in characters
+  u16_pair cursor_location; // in characters
+  
+} Window;
+</pre>
+</div>
+
+<p>
+Now we need to determine which location in the buffer represents the
+first character of the first line in our window. The naïve approach is
+what we will do first. Let&rsquo;s just typeset everything from the
+beginning of the buffer until our current location. Actually, it&rsquo;s
+simpler than that. We just need to keep track of the locations in the
+buffer that represent the beginnings of lines.
+</p>
+
+<ul class="org-ul">
+<li class="off"><code>[&#xa0;]</code> TODO: It would be cool to be able to show the outside of the buffer struct sorta dimed giving the new code here some context</li>
+<li class="off"><code>[&#xa0;]</code> TODO: We should also allow you to click on a snippet and see it all merged together</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org328c63d">u64 line_count;
+u64 * line_starts;
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-c" id="orgfbc91b2">b-&gt;line_starts = malloc(4096*sizeof(u64));
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-c" id="orgef84a22">for (u64 i = 0; i &lt; b-&gt;length; i++) {
+  
+}
+</pre>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-org12da4f4" class="outline-3">
+<h3 id="org12da4f4"><span class="section-number-3">3.2.</span> Display State</h3>
+<div class="outline-text-3" id="text-3-2">
+<div class="org-src-container">
+<pre class="src src-c" id="org112bcfa">typedef struct {
+  FONScontext* fons;
+  float dpi_scale;
+  int font_mono;
+  int font_normal;
+  uint8_t font_mono_data[16 * 256 * 1024];
+  uint8_t font_normal_data[256 * 1024];
+} state_t;
+static state_t state;
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgafe7ad7" class="outline-3">
+<h3 id="orgafe7ad7"><span class="section-number-3">3.3.</span> Draw Frame</h3>
+<div class="outline-text-3" id="text-3-3">
+<div class="org-src-container">
+<pre class="src src-c" id="org029bfd0">static void draw_frame(void) {
+  const char * str = (const char *)buffers[current_buffer_id].contents;
+  const float dpis = state.dpi_scale;
+
+  // pump sokol_fetch message queues (GUIDO: why?)
+  sfetch_dowork();
+
+  float sx, sy, dx, dy, lh = 0.0f;
+  uint32_t white = sfons_rgba(255, 255, 255, 255);
+  fonsClearState(state.fons);
+
+  sgl_defaults();
+  sgl_matrix_mode_projection();
+  sgl_ortho(0.0f, sapp_widthf(), sapp_heightf(), 0.0f, -1.0f, +1.0f);
+
+  sx = 50*dpis; sy = 50*dpis;
+  dx = sx; dy = sy;
+
+  FONScontext* fs = state.fons;
+  fonsSetFont(fs, state.font_normal);
+  fonsSetSize(fs, 124.0f*dpis);
+  fonsVertMetrics(fs, NULL, NULL, &amp;lh);
+  dx = sx;
+  dy += lh;
+  fonsSetColor(fs, white);
+  dx = fonsDrawText(fs, dx, dy, str, NULL);
+
+  // Draw status line
+  line(0, sapp_heightf()-100, sapp_widthf(), sapp_heightf()-100);
+  fonsSetFont(fs, state.font_mono);
+  fonsSetSize(fs, 48.0f*dpis);
+  dx = fonsDrawText(fs, 0, sapp_heightf()-24, "U:**-  *scratch*  0% (0,0)", NULL);
+  
+  // flush fontstash's font atlas to sokol-gfx texture
+  sfons_flush(fs);
+
+  // render pass
+  sg_begin_default_pass(&amp;(sg_pass_action){
+      .colors[0] = {
+        .action = SG_ACTION_CLEAR, .value = { 0.3f, 0.3f, 0.32f, 1.0f }
+      }
+    }, sapp_width(), sapp_height());
+  sgl_draw();
+  __dbgui_draw();
+  sg_end_pass();
+  sg_commit();
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgb587aa5" class="outline-2">
+<h2 id="orgb587aa5"><span class="section-number-2">4.</span> TextMode vs Graphics</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Using Sokol, to build:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">clang build/third-sokol.c experiments/sokol.m -o build/third-sokol -DSOKOL_METAL -fobjc-arc -Iexperiments/ -framework Metal -framework Cocoa -framework MetalKit -framework Quartz -framework AudioToolbox &amp;&amp; build/third-sokol 
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-c" id="org6f4962b">#include "sokol_app.h"
+#include "sokol_gfx.h"
+#include "sokol_fetch.h"
+#include "sokol_log.h"
+#include "sokol_glue.h"
+#define SOKOL_GL_IMPL
+#include "sokol_gl.h"
+#include &lt;stdio.h&gt;  // needed by fontstash's IO functions even though they are not used
+#define FONTSTASH_IMPLEMENTATION
+#if defined(_MSC_VER )
+#pragma warning(disable:4996)   // strncpy use in fontstash.h
+#endif
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
+#pragma GCC diagnostic ignored "-Wsign-conversion"
+#endif
+#include "fontstash/fontstash.h"
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
+#define SOKOL_FONTSTASH_IMPL
+#include "sokol_fontstash.h"
+#include "dbgui/dbgui.h"
+
+#include &lt;stdint.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef int64_t i64;
+typedef uint64_t u64;
+typedef uint8_t Status;
+typedef uint16_t BufferId;
+//typedef char[8] Slug; // a short string (≤ 8 bytes)
+
+enum {Success,Failure,NotUnicode};
+
+typedef struct String { u8 len; u8 s[64]; } String;
+String str(const char * x) {
+  // TODO: assert string length
+  String y = {.len=sizeof(x)};
+  memcpy(y.s, x, y.len);
+  return y;
+}
+
+u8 to_utf8(u8 * buf, u32 ch)
+{
+    if (ch &lt;= 0x7F) {
+        buf[0] = ch;
+        return 1;
+    }
+    if (ch &lt;= 0x7FF) {
+        buf[0] = 0xC0 | (ch &gt;&gt; 6);            /* 110xxxxx */
+        buf[1] = 0x80 | (ch &amp; 0x3F);          /* 10xxxxxx */
+        return 2;
+    }
+    if (ch &lt;= 0xFFFF) {
+        buf[0] = 0xE0 | (ch &gt;&gt; 12);           /* 1110xxxx */
+        buf[1] = 0x80 | ((ch &gt;&gt; 6) &amp; 0x3F);   /* 10xxxxxx */
+        buf[2] = 0x80 | (ch &amp; 0x3F);          /* 10xxxxxx */
+        return 3;
+    }
+    if (ch &lt;= 0x10FFFF) {
+        buf[0] = 0xF0 | (ch &gt;&gt; 18);           /* 11110xxx */
+        buf[1] = 0x80 | ((ch &gt;&gt; 12) &amp; 0x3F);  /* 10xxxxxx */
+        buf[2] = 0x80 | ((ch &gt;&gt; 6) &amp; 0x3F);   /* 10xxxxxx */
+        buf[3] = 0x80 | (ch &amp; 0x3F);          /* 10xxxxxx */
+        return 4;
+    }
+    return 0;
+}
+typedef struct Buffer {
+  BufferId id;
+  String name;
+  u8* contents;
+  u64 length;
+  u64 point;
+  // Mark mark; no need to this quite yet
+  
+} Buffer;
+
+Buffer buffers[64];
+u16 buffers_len;
+BufferId current_buffer_id;
+Status create_buffer(String name) {
+  for (int i = 0; i &lt; buffers_len; i++) {
+    if (memcmp(buffers[i].name.s, name.s, name.len) == 0) {
+      return Failure;
+    }
+  }
+  int i = buffers_len++;
+  Buffer * b = &amp;buffers[i];
+  b-&gt;id = i;
+  b-&gt;name = name;
+  b-&gt;contents = malloc(100);
+  return Success;
+}
+
+Status set_current_buffer(String name) {
+  for (int i = 0; i &lt; buffers_len; i++) {
+    if (memcmp(buffers[i].name.s, name.s, name.len) == 0) {
+      current_buffer_id = i;
+    }
+  }
+  return Failure;
+}
+Status insert_char(u32 ch) {
+  u8 * b = buffers[current_buffer_id].contents;
+  u64 loc = buffers[current_buffer_id].point;
+  printf("Inserting %d to location %llu\n", ch, loc);
+  u8 enc[4];
+  u8 n = to_utf8(enc, ch);
+  if (n == 0) return NotUnicode;
+  memmove(b+loc+n, b+loc, n);
+  memcpy(b+loc, enc, n);
+  buffers[current_buffer_id].point++;
+  buffers[current_buffer_id].length += n;
+  return Success;
+}
+void handle_event(const sapp_event* event) {
+  // SAPP_EVENTTYPE_KEY_DOWN
+  // SAPP_EVENTTYPE_KEY_UP
+  if (event-&gt;type == SAPP_EVENTTYPE_CHAR) {
+    insert_char(event-&gt;char_code);
+    // bool key_repeat;
+    // uint32_t modifiers;
+  }
+}
+typedef struct {
+  FONScontext* fons;
+  float dpi_scale;
+  int font_mono;
+  int font_normal;
+  uint8_t font_mono_data[16 * 256 * 1024];
+  uint8_t font_normal_data[256 * 1024];
+} state_t;
+static state_t state;
+void font_mono_loaded(const sfetch_response_t* response) {
+  printf("Loading mono\n");
+  if (response-&gt;fetched) {
+    printf("Loaded mono\n");
+    state.font_mono = fonsAddFontMem(state.fons, "mono", (void*)response-&gt;data.ptr, (int)response-&gt;data.size,  false);
+  }
+  else if (response-&gt;failed) {
+    printf("Loading mono failed: %d\n", response-&gt;error_code);
+  }
+}
+
+void font_normal_loaded(const sfetch_response_t* response) {
+  printf("Loading normal\n");
+  if (response-&gt;fetched) {
+    printf("Loaded normal\n");
+    state.font_normal = fonsAddFontMem(state.fons, "sans", (void*)response-&gt;data.ptr, (int)response-&gt;data.size,  false);
+  }
+}
+
+/* round to next power of 2 (see bit-twiddling-hacks) */
+int round_pow2(float v) {
+    uint32_t vi = ((uint32_t) v) - 1;
+    for (uint32_t i = 0; i &lt; 5; i++) {
+        vi |= (vi &gt;&gt; (1&lt;&lt;i));
+    }
+    return (int) (vi + 1);
+}
+
+void line(float sx, float sy, float ex, float ey)
+{
+  sgl_begin_lines();
+  sgl_c4b(255, 255, 255, 128);
+  sgl_v2f(sx, sy);
+  sgl_v2f(ex, ey);
+  sgl_end();
+}
+
+static void init(void) {
+  create_buffer(str("*scratch*"));
+  set_current_buffer(str("*scratch*"));
+
+  state.dpi_scale = sapp_dpi_scale();
+  sg_setup(&amp;(sg_desc){.context = sapp_sgcontext(), .logger.func = slog_func});
+  __dbgui_setup(sapp_sample_count());
+  sgl_setup(&amp;(sgl_desc_t){.logger.func = slog_func});
+
+  // make sure the fontstash atlas width/height is pow-2
+  const int atlas_dim = round_pow2(512.0f * state.dpi_scale);
+  state.fons = sfons_create(&amp;(sfons_desc_t){.width = atlas_dim, .height = atlas_dim});
+  state.font_mono = FONS_INVALID;
+  state.font_normal = FONS_INVALID;
+
+    sfetch_setup(&amp;(sfetch_desc_t){
+        .num_channels = 1,
+        .num_lanes = 4,
+        .logger.func = slog_func,
+    });
+    sfetch_send(&amp;(sfetch_request_t){
+        .path = "/Users/guido/Library/Fonts/MinionPro-Regular.otf",
+        .callback = font_normal_loaded,
+        .buffer = SFETCH_RANGE(state.font_normal_data),
+    });
+    sfetch_send(&amp;(sfetch_request_t){
+        .path = "/Users/guido/Library/Fonts/Hack Regular Nerd Font Complete.ttf",
+        .callback = font_mono_loaded,
+        .buffer = SFETCH_RANGE(state.font_mono_data),
+    });
+}
+
+static void draw_frame(void) {
+  const char * str = (const char *)buffers[current_buffer_id].contents;
+  const float dpis = state.dpi_scale;
+
+  // pump sokol_fetch message queues (GUIDO: why?)
+  sfetch_dowork();
+
+  float sx, sy, dx, dy, lh = 0.0f;
+  uint32_t white = sfons_rgba(255, 255, 255, 255);
+  fonsClearState(state.fons);
+
+  sgl_defaults();
+  sgl_matrix_mode_projection();
+  sgl_ortho(0.0f, sapp_widthf(), sapp_heightf(), 0.0f, -1.0f, +1.0f);
+
+  sx = 50*dpis; sy = 50*dpis;
+  dx = sx; dy = sy;
+
+  FONScontext* fs = state.fons;
+  fonsSetFont(fs, state.font_normal);
+  fonsSetSize(fs, 124.0f*dpis);
+  fonsVertMetrics(fs, NULL, NULL, &amp;lh);
+  dx = sx;
+  dy += lh;
+  fonsSetColor(fs, white);
+  dx = fonsDrawText(fs, dx, dy, str, NULL);
+
+  // Draw status line
+  line(0, sapp_heightf()-100, sapp_widthf(), sapp_heightf()-100);
+  fonsSetFont(fs, state.font_mono);
+  fonsSetSize(fs, 48.0f*dpis);
+  dx = fonsDrawText(fs, 0, sapp_heightf()-24, "U:**-  *scratch*  0% (0,0)", NULL);
+  
+  // flush fontstash's font atlas to sokol-gfx texture
+  sfons_flush(fs);
+
+  // render pass
+  sg_begin_default_pass(&amp;(sg_pass_action){
+      .colors[0] = {
+        .action = SG_ACTION_CLEAR, .value = { 0.3f, 0.3f, 0.32f, 1.0f }
+      }
+    }, sapp_width(), sapp_height());
+  sgl_draw();
+  __dbgui_draw();
+  sg_end_pass();
+  sg_commit();
+}
+
+void cleanup(void) {
+  __dbgui_shutdown();
+  sfetch_shutdown();
+  sfons_destroy(state.fons);
+  sgl_shutdown();
+  sg_shutdown();
+}
+
+sapp_desc sokol_main(int argc, char* argv[]) {
+  (void)argc;
+  (void)argv;
+  return (sapp_desc) {
+    .init_cb = init,
+    .frame_cb = draw_frame,
+    .cleanup_cb = cleanup,
+    .event_cb = handle_event, // Or use .event_cb = __dbgui_event,
+    .width = 800,
+    .height = 600,
+    .high_dpi = true,
+    .gl_force_gles2 = true,
+    .window_title = "fontstash",
+    .icon.sokol_default = true,
+    .logger.func = slog_func,
+  };
+}
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgfead18b" class="outline-3">
+<h3 id="orgfead18b"><span class="section-number-3">4.1.</span> Unicode Helpers</h3>
+<div class="outline-text-3" id="text-4-1">
+<div class="org-src-container">
+<pre class="src src-c" id="org373f76f">typedef struct String { u8 len; u8 s[64]; } String;
+String str(const char * x) {
+  // TODO: assert string length
+  String y = {.len=sizeof(x)};
+  memcpy(y.s, x, y.len);
+  return y;
+}
+
+u8 to_utf8(u8 * buf, u32 ch)
+{
+    if (ch &lt;= 0x7F) {
+        buf[0] = ch;
+        return 1;
+    }
+    if (ch &lt;= 0x7FF) {
+        buf[0] = 0xC0 | (ch &gt;&gt; 6);            /* 110xxxxx */
+        buf[1] = 0x80 | (ch &amp; 0x3F);          /* 10xxxxxx */
+        return 2;
+    }
+    if (ch &lt;= 0xFFFF) {
+        buf[0] = 0xE0 | (ch &gt;&gt; 12);           /* 1110xxxx */
+        buf[1] = 0x80 | ((ch &gt;&gt; 6) &amp; 0x3F);   /* 10xxxxxx */
+        buf[2] = 0x80 | (ch &amp; 0x3F);          /* 10xxxxxx */
+        return 3;
+    }
+    if (ch &lt;= 0x10FFFF) {
+        buf[0] = 0xF0 | (ch &gt;&gt; 18);           /* 11110xxx */
+        buf[1] = 0x80 | ((ch &gt;&gt; 12) &amp; 0x3F);  /* 10xxxxxx */
+        buf[2] = 0x80 | ((ch &gt;&gt; 6) &amp; 0x3F);   /* 10xxxxxx */
+        buf[3] = 0x80 | (ch &amp; 0x3F);          /* 10xxxxxx */
+        return 4;
+    }
+    return 0;
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgc77a0b8" class="outline-2">
+<h2 id="orgc77a0b8"><span class="section-number-2">5.</span> Extensions</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-org82d653e" class="outline-3">
+<h3 id="org82d653e"><span class="section-number-3">5.1.</span> Lisp Nodes</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+The classic C implementation of a Lisp node is an implicit tagged
+union of the native word size where the lower 3 bits of a pointer tag
+the data that it points to and structs in the array-of-structs style.
+</p>
+
+<p>
+The modern style is for a struct-of-arrays where we have large
+contiguous swaths of identially typed data. We are going to assume a
+64 bit native word size here for simplicity. I can think of no good
+reason to make this program optimized for other word sizes. If it is
+then the hypothetical 32-bit word size advocate is encouraged to fork
+this codebase.
+</p>
+
+<p>
+A block of 64 cells (4096 bytes) is a natural point of segmentation.
+This allows flags for all 64 cells to each fit into a single 64 bit
+word.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">typedef struct Cons {
+  u32 car;
+  u32 cde;
+} Cons;
+
+typedef struct Cell {
+  union {
+    i64  n;
+    u32  c; // unicode codepoint
+    //Slug s;
+    Cons p;
+  } 
+} Cell;
+
+enum Tag {Number, Character, Slug, ConsPair};
+
+Tag  tags[4096];
+Cell cells[4096];
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org597dd8c" class="outline-2">
+<h2 id="org597dd8c"><span class="section-number-2">6.</span> Stupid Ideas</h2>
+<div class="outline-text-2" id="text-6">
+<ul class="org-ul">
+<li>Maybe a slug should store 7 bit ascii chars and use the remaining
+bits for length?</li>
+<li>When loading a file we can write out the text pretty quickly into a
+block of cells and then write out the car/cdr parts in a different
+part of the block all at once.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgf6933cd" class="outline-2">
+<h2 id="orgf6933cd"><span class="section-number-2">7.</span> Questions</h2>
+<div class="outline-text-2" id="text-7">
+<ul class="org-ul">
+<li>How many ms does it take to redisplay the whole display? Is it less
+than an incremental approach on a modern computer?</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Guido Bartolucci</p>
+<p class="date">Created: 2023-02-25 Sat 14:16</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
