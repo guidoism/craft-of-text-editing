@@ -28,9 +28,6 @@ add the following features:
 - Add a status bar to the bottom
 - Make a cursor
 
-Later we will: 
-
-
 ** Buffers
 
 Everything is a buffer. That statement is not quite true, but it's
@@ -257,6 +254,40 @@ void handle_event(const sapp_event* event) {
 #+end_src
 
 ** Display
+
+*** Typeset Buffer
+
+This is where we translate the one-dimensional buffer into our
+two-dimensional display. In anticipation of the later addition of
+"windows" we will provide the ability to typeset a buffer into any
+size. We will go ahead an call the display a window for now. In fact,
+it makes sense to think of a window as a view into the buffer. You
+aren't necessarily going to see the whole thing.
+
+If the buffer typesets into something smaller than the window then our
+job is very easy. It gets more complicated when we have to figure out
+where to place the point and then determine how far back to start
+from.
+
+Let's try to describe the typesetting algorithm for a large buffer
+and then see if that also solves our simple case.
+
+The point is obviously kept as part as an index into the buffer. It's
+also something visual, a cursor that has a location in the window.
+This relationship must be the heart of our algorithm. Let's start
+by defining our Window type.
+
+#+name: window
+#+begin_src c :noweb yes
+typedef struct Window {
+  u16_pair size_in_pixels;  // in pixels
+  u16_pair size_in_chars;   // in characters
+  u16_pair cursor_location; // in characters
+  <<window_additions>>
+} Window;
+#+end_src
+
+
 
 *** Display State
 #+name: display_state
