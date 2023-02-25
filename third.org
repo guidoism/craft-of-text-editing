@@ -1,3 +1,5 @@
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="plaintexcss.css" />
+
 This is a text editor in the style of Emacs. It has been written
 from scratch in a literate form with help from Craig A. Finseth's
 book [[https://www.finseth.com/craft/][The Craft of Text Editing --or-- Emacs for the Modern World]].
