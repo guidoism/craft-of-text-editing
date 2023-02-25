@@ -11,6 +11,10 @@ For me to learn how a large editor like emacs works by writing something similar
 - An (unrealistic but awesome) end goal would be to write an ELisp interpreter from scratch and run the actual .el files for the editor
 - A source of help reading the files might be found from [REmacs](https://github.com/remacs/remacs), but I don't want to work from the actual messy Emacs repository like they did. I want to start from scratch.
 
+## Third
+
+https://guidoism.github.io/craft-of-text-editing/third.html
+
 ## References
 
 - [Other Emacs Implementations](http://www.finseth.com/emacs.html)

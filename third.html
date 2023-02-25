@@ -441,21 +441,20 @@ The universal argument is assumed to be the number of times to repeat
 the character being inserted.
 </p>
 
-<div class="org-src-container">
-<pre class="src src-c" id="orga3e46fa">Status insert_char(u32 ch) {
-  u8 * b = buffers[current_buffer_id].contents;
-  u64 loc = buffers[current_buffer_id].point;
-  printf("Inserting %d to location %llu\n", ch, loc);
-  u8 enc[4];
-  u8 n = to_utf8(enc, ch);
-  if (n == 0) return NotUnicode;
-  memmove(b+loc+n, b+loc, n);
-  memcpy(b+loc, enc, n);
-  buffers[current_buffer_id].point++;
-  buffers[current_buffer_id].length += n;
-  return Success;
-}
-</pre>
+<div class="org-src-container highlight">
+  <pre class="src src-c" id="orga3e46fa"><span></span><span class="n">Status</span><span class="w"> </span><span class="nf">insert_char</span><span class="p">(</span><span class="n">u32</span><span class="w"> </span><span class="n">ch</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">u8</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffers</span><span class="p">[</span><span class="n">current_buffer_id</span><span class="p">].</span><span class="n">contents</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">u64</span><span class="w"> </span><span class="n">loc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffers</span><span class="p">[</span><span class="n">current_buffer_id</span><span class="p">].</span><span class="n">point</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Inserting %d to location %llu</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ch</span><span class="p">,</span><span class="w"> </span><span class="n">loc</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">u8</span><span class="w"> </span><span class="n">enc</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="n">u8</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">to_utf8</span><span class="p">(</span><span class="n">enc</span><span class="p">,</span><span class="w"> </span><span class="n">ch</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">NotUnicode</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">memmove</span><span class="p">(</span><span class="n">b</span><span class="o">+</span><span class="n">loc</span><span class="o">+</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="o">+</span><span class="n">loc</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">memcpy</span><span class="p">(</span><span class="n">b</span><span class="o">+</span><span class="n">loc</span><span class="p">,</span><span class="w"> </span><span class="n">enc</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">buffers</span><span class="p">[</span><span class="n">current_buffer_id</span><span class="p">].</span><span class="n">point</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">buffers</span><span class="p">[</span><span class="n">current_buffer_id</span><span class="p">].</span><span class="n">length</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">Success</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </div>
 </div>
 </div>

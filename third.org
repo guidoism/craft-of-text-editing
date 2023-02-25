@@ -4,7 +4,7 @@ This is a text editor in the style of Emacs. It has been written from
 scratch in a literate form with help from Craig A. Finseth's book [[https://www.finseth.com/craft/][The
 Craft of Text Editing --or-- Emacs for the Modern World]]. We have
 written in in Org-mode using a tweaked Vincent Dörig's [[https://latex.vercel.app][latex.css]]
-to make the weaved output look pretty.
+and [[https://github.com/StylishThemes/Syntax-Themes/tree/master/pygments][css'd pygments]] to make the weaved output look pretty.
 
 Our motivation is to be able to learn how a actually-usable non-toy
 text editor works by reading the source code and commentary in a
