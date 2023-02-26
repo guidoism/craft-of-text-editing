@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2023-02-25 Sat 14:16 -->
+<!-- 2023-02-26 Sun 18:19 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -201,51 +201,58 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org099b3fa">1. Buffers</a>
+<li><a href="#org1ac1bf7">0.1. Buffers</a>
 <ul>
-<li><a href="#org91ea394">1.1. Buffer Representation</a>
-<ul>
-<li><a href="#org4fb89b3">1.1.1. Gap Buffers</a></li>
-<li><a href="#orgda9f995">1.1.2. Naïve Buffer</a></li>
+<li><a href="#org1d931aa">0.1.1. Buffer Representation</a></li>
+<li><a href="#org7e76077">0.1.2. Create a new buffer</a></li>
+<li><a href="#org2b880fc">0.1.3. Insert a character</a></li>
 </ul>
 </li>
-<li><a href="#orgbcb1df7">1.2. Create a new buffer</a></li>
-<li><a href="#orgce1ebae">1.3. Insert a character</a></li>
-</ul>
-</li>
-<li><a href="#orgc160d77">2. Events</a>
+<li><a href="#org6ab76f5">0.2. Events</a>
 <ul>
-<li><a href="#org7e1e06f">2.1. Initialize Everything</a></li>
-<li><a href="#orgcee8680">2.2. Load Fonts</a></li>
-<li><a href="#orgdeb1819">2.3. Handle Event</a></li>
+<li><a href="#orgf6b16d4">0.2.1. Initialize Everything</a></li>
+<li><a href="#org97ef5cf">0.2.2. Load Fonts</a></li>
+<li><a href="#orgcbc1812">0.2.3. Handle Event</a></li>
 </ul>
 </li>
-<li><a href="#org88405ca">3. Display</a>
+<li><a href="#orgaa7b83e">0.3. Display</a>
 <ul>
-<li><a href="#org40ba986">3.1. Typeset Buffer</a></li>
-<li><a href="#org12da4f4">3.2. Display State</a></li>
-<li><a href="#orgafe7ad7">3.3. Draw Frame</a></li>
+<li><a href="#orgd694c12">0.3.1. Typeset Buffer</a></li>
+<li><a href="#org75034d4">0.3.2. Display State</a></li>
+<li><a href="#orgd142a63">0.3.3. Draw Frame</a></li>
 </ul>
 </li>
-<li><a href="#orgb587aa5">4. TextMode vs Graphics</a>
+<li><a href="#orgcca5b78">0.4. TextMode vs Graphics</a>
 <ul>
-<li><a href="#orgfead18b">4.1. Unicode Helpers</a></li>
+<li><a href="#org931c221">0.4.1. Unicode Helpers</a></li>
 </ul>
 </li>
-<li><a href="#orgc77a0b8">5. Extensions</a>
+<li><a href="#org8a508b9">0.5. Extensions</a>
 <ul>
-<li><a href="#org82d653e">5.1. Lisp Nodes</a></li>
+<li><a href="#org357060b">0.5.1. Lisp Nodes</a></li>
 </ul>
 </li>
-<li><a href="#org597dd8c">6. Stupid Ideas</a></li>
-<li><a href="#orgf6933cd">7. Questions</a></li>
+<li><a href="#orga791990">0.6. Stupid Ideas</a></li>
+<li><a href="#org2488a2e">0.7. Questions</a></li>
+</ul>
+</li>
+<li><a href="#org924267a">1. Exporting</a>
+<ul>
+<li>
+<ul>
+<li><a href="#org3936b51">1.0.1. Bailing wire and duct tape</a></li>
+<li><a href="#orga644c5d">1.0.2. Shit that doesn&rsquo;t work</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
 <p>
-This is a text editor in the style of Emacs. It has been written
-from scratch in a literate form with help from Craig A. Finseth&rsquo;s
-book <a href="https://www.finseth.com/craft/">The Craft of Text Editing &#x2013;or&#x2013; Emacs for the Modern World</a>.
+This is a text editor in the style of Emacs. It has been written from
+scratch in a literate form with help from Craig A. Finseth&rsquo;s book <a href="https://www.finseth.com/craft/">The
+Craft of Text Editing &#x2013;or&#x2013; Emacs for the Modern World</a>. We have
+written in in Org-mode using a tweaked Vincent Dörig&rsquo;s <a href="https://latex.vercel.app">latex.css</a>
+and <a href="https://github.com/StylishThemes/Syntax-Themes/tree/master/pygments">css&rsquo;d pygments</a> to make the weaved output look pretty.
 </p>
 
 <p>
@@ -284,9 +291,9 @@ add the following features:
 <li>Make a cursor</li>
 </ul>
 
-<div id="outline-container-org099b3fa" class="outline-2">
-<h2 id="org099b3fa"><span class="section-number-2">1.</span> Buffers</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-org1ac1bf7" class="outline-3">
+<h3 id="org1ac1bf7"><span class="section-number-3">0.1.</span> Buffers</h3>
+<div class="outline-text-3" id="text-0-1">
 <p>
 Everything is a buffer. That statement is not quite true, but it&rsquo;s
 true enough. Files that we edit are loading into a buffer. When we
@@ -340,9 +347,9 @@ syntactically correct.
 </p>
 </div>
 
-<div id="outline-container-org91ea394" class="outline-3">
-<h3 id="org91ea394"><span class="section-number-3">1.1.</span> Buffer Representation</h3>
-<div class="outline-text-3" id="text-1-1">
+<div id="outline-container-org1d931aa" class="outline-4">
+<h4 id="org1d931aa"><span class="section-number-4">0.1.1.</span> Buffer Representation</h4>
+<div class="outline-text-4" id="text-0-1-1">
 <p>
 The choice of data structure for a buffer of text is dependent several
 factors most notably how much text, whether it is full of many short
@@ -357,20 +364,19 @@ its lifetime.
 </p>
 </div>
 
-<div id="outline-container-org4fb89b3" class="outline-4">
-<h4 id="org4fb89b3"><span class="section-number-4">1.1.1.</span> Gap Buffers</h4>
-<div class="outline-text-4" id="text-1-1-1">
+<ol class="org-ol">
+<li><a id="orgb6bca6f"></a>Gap Buffers<br />
+<div class="outline-text-5" id="text-0-1-1-1">
 <p>
 In the actual implementation they use Gap Buffers. A buffer
 initial starts off all gap, the first part is 0 length at
 the beginning and the second part is 0 length at the end.
 </p>
 </div>
-</div>
+</li>
 
-<div id="outline-container-orgda9f995" class="outline-4">
-<h4 id="orgda9f995"><span class="section-number-4">1.1.2.</span> Naïve Buffer</h4>
-<div class="outline-text-4" id="text-1-1-2">
+<li><a id="orgbd24882"></a>Naïve Buffer<br />
+<div class="outline-text-5" id="text-0-1-1-2">
 <p>
 Before we implement the more complex gap buffer we will
 implement the most naïve form of buffer. Just a flat piece
@@ -379,59 +385,62 @@ the insertion point with <code>memmove</code> during each edit.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="orga914262">typedef struct Buffer {
-  BufferId id;
-  String name;
-  u8* contents;
-  u64 length;
-  u64 point;
-  // Mark mark; no need to this quite yet
-  
-} Buffer;
+<div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Buffer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">BufferId</span><span class="w"> </span><span class="n">id</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">u8</span><span class="o">*</span><span class="w"> </span><span class="n">contents</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">u64</span><span class="w"> </span><span class="n">length</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">u64</span><span class="w"> </span><span class="n">point</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// Mark mark; no need to this quite yet</span>
+<span class="w">  </span>
+<span class="p">}</span><span class="w"> </span><span class="n">Buffer</span><span class="p">;</span><span class="w"></span>
 
-Buffer buffers[64];
-u16 buffers_len;
-BufferId current_buffer_id;
-</pre>
+<span class="n">Buffer</span><span class="w"> </span><span class="n">buffers</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span><span class="w"></span>
+<span class="n">u16</span><span class="w"> </span><span class="n">buffers_len</span><span class="p">;</span><span class="w"></span>
+<span class="n">BufferId</span><span class="w"> </span><span class="n">current_buffer_id</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+
 </div>
 </div>
-</div>
+</li>
+</ol>
 </div>
 
-<div id="outline-container-orgbcb1df7" class="outline-3">
-<h3 id="orgbcb1df7"><span class="section-number-3">1.2.</span> Create a new buffer</h3>
-<div class="outline-text-3" id="text-1-2">
+<div id="outline-container-org7e76077" class="outline-4">
+<h4 id="org7e76077"><span class="section-number-4">0.1.2.</span> Create a new buffer</h4>
+<div class="outline-text-4" id="text-0-1-2">
 <div class="org-src-container">
-<pre class="src src-c" id="orgc958ad2">Status create_buffer(String name) {
-  for (int i = 0; i &lt; buffers_len; i++) {
-    if (memcmp(buffers[i].name.s, name.s, name.len) == 0) {
-      return Failure;
-    }
-  }
-  int i = buffers_len++;
-  Buffer * b = &amp;buffers[i];
-  b-&gt;id = i;
-  b-&gt;name = name;
-  b-&gt;contents = malloc(100);
-  return Success;
-}
+<div class="highlight"><pre><span></span><span class="n">Status</span><span class="w"> </span><span class="nf">create_buffer</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="w"> </span><span class="n">buffers_len</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">memcmp</span><span class="p">(</span><span class="n">buffers</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">.</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">.</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">.</span><span class="n">len</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">Failure</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffers_len</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">Buffer</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">buffers</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="n">b</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">b</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">b</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">contents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">Success</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-Status set_current_buffer(String name) {
-  for (int i = 0; i &lt; buffers_len; i++) {
-    if (memcmp(buffers[i].name.s, name.s, name.len) == 0) {
-      current_buffer_id = i;
-    }
-  }
-  return Failure;
-}
-</pre>
+<span class="n">Status</span><span class="w"> </span><span class="nf">set_current_buffer</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="w"> </span><span class="n">buffers_len</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">memcmp</span><span class="p">(</span><span class="n">buffers</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">.</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">.</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">.</span><span class="n">len</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">current_buffer_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">Failure</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgce1ebae" class="outline-3">
-<h3 id="orgce1ebae"><span class="section-number-3">1.3.</span> Insert a character</h3>
-<div class="outline-text-3" id="text-1-3">
+<div id="outline-container-org2b880fc" class="outline-4">
+<h4 id="org2b880fc"><span class="section-number-4">0.1.3.</span> Insert a character</h4>
+<div class="outline-text-4" id="text-0-1-3">
 <p>
 Insert the character that has been typed.
 </p>
@@ -441,8 +450,8 @@ The universal argument is assumed to be the number of times to repeat
 the character being inserted.
 </p>
 
-<div class="org-src-container highlight">
-  <pre class="src src-c" id="orga3e46fa"><span></span><span class="n">Status</span><span class="w"> </span><span class="nf">insert_char</span><span class="p">(</span><span class="n">u32</span><span class="w"> </span><span class="n">ch</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<div class="org-src-container">
+<div class="highlight"><pre><span></span><span class="n">Status</span><span class="w"> </span><span class="nf">insert_char</span><span class="p">(</span><span class="n">u32</span><span class="w"> </span><span class="n">ch</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="n">u8</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffers</span><span class="p">[</span><span class="n">current_buffer_id</span><span class="p">].</span><span class="n">contents</span><span class="p">;</span><span class="w"></span>
 <span class="w">  </span><span class="n">u64</span><span class="w"> </span><span class="n">loc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffers</span><span class="p">[</span><span class="n">current_buffer_id</span><span class="p">].</span><span class="n">point</span><span class="p">;</span><span class="w"></span>
 <span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Inserting %d to location %llu</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ch</span><span class="p">,</span><span class="w"> </span><span class="n">loc</span><span class="p">);</span><span class="w"></span>
@@ -455,140 +464,145 @@ the character being inserted.
 <span class="w">  </span><span class="n">buffers</span><span class="p">[</span><span class="n">current_buffer_id</span><span class="p">].</span><span class="n">length</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"></span>
 <span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">Success</span><span class="p">;</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
+</pre></div>
+
 </div>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgc160d77" class="outline-2">
-<h2 id="orgc160d77"><span class="section-number-2">2.</span> Events</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-org6ab76f5" class="outline-3">
+<h3 id="org6ab76f5"><span class="section-number-3">0.2.</span> Events</h3>
+<div class="outline-text-3" id="text-0-2">
 <p>
 Now we move on to the human scale. This is where we react to keys
 being pressed or being told that we need to re-draw the display.
 </p>
 </div>
 
-<div id="outline-container-org7e1e06f" class="outline-3">
-<h3 id="org7e1e06f"><span class="section-number-3">2.1.</span> Initialize Everything</h3>
-<div class="outline-text-3" id="text-2-1">
+<div id="outline-container-orgf6b16d4" class="outline-4">
+<h4 id="orgf6b16d4"><span class="section-number-4">0.2.1.</span> Initialize Everything</h4>
+<div class="outline-text-4" id="text-0-2-1">
 <div class="org-src-container">
-<pre class="src src-c" id="org995fdb1">static void init(void) {
-  create_buffer(str("*scratch*"));
-  set_current_buffer(str("*scratch*"));
+<div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">create_buffer</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="s">&quot;*scratch*&quot;</span><span class="p">));</span><span class="w"></span>
+<span class="w">  </span><span class="n">set_current_buffer</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="s">&quot;*scratch*&quot;</span><span class="p">));</span><span class="w"></span>
 
-  state.dpi_scale = sapp_dpi_scale();
-  sg_setup(&amp;(sg_desc){.context = sapp_sgcontext(), .logger.func = slog_func});
-  __dbgui_setup(sapp_sample_count());
-  sgl_setup(&amp;(sgl_desc_t){.logger.func = slog_func});
+<span class="w">  </span><span class="n">state</span><span class="p">.</span><span class="n">dpi_scale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sapp_dpi_scale</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">sg_setup</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">sg_desc</span><span class="p">){.</span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sapp_sgcontext</span><span class="p">(),</span><span class="w"> </span><span class="p">.</span><span class="n">logger</span><span class="p">.</span><span class="n">func</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">slog_func</span><span class="p">});</span><span class="w"></span>
+<span class="w">  </span><span class="n">__dbgui_setup</span><span class="p">(</span><span class="n">sapp_sample_count</span><span class="p">());</span><span class="w"></span>
+<span class="w">  </span><span class="n">sgl_setup</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">sgl_desc_t</span><span class="p">){.</span><span class="n">logger</span><span class="p">.</span><span class="n">func</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">slog_func</span><span class="p">});</span><span class="w"></span>
 
-  // make sure the fontstash atlas width/height is pow-2
-  const int atlas_dim = round_pow2(512.0f * state.dpi_scale);
-  state.fons = sfons_create(&amp;(sfons_desc_t){.width = atlas_dim, .height = atlas_dim});
-  state.font_mono = FONS_INVALID;
-  state.font_normal = FONS_INVALID;
+<span class="w">  </span><span class="c1">// make sure the fontstash atlas width/height is pow-2</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">atlas_dim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">round_pow2</span><span class="p">(</span><span class="mf">512.0f</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">state</span><span class="p">.</span><span class="n">dpi_scale</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">state</span><span class="p">.</span><span class="n">fons</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sfons_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">sfons_desc_t</span><span class="p">){.</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atlas_dim</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atlas_dim</span><span class="p">});</span><span class="w"></span>
+<span class="w">  </span><span class="n">state</span><span class="p">.</span><span class="n">font_mono</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FONS_INVALID</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">state</span><span class="p">.</span><span class="n">font_normal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FONS_INVALID</span><span class="p">;</span><span class="w"></span>
 
-    sfetch_setup(&amp;(sfetch_desc_t){
-        .num_channels = 1,
-        .num_lanes = 4,
-        .logger.func = slog_func,
-    });
-    sfetch_send(&amp;(sfetch_request_t){
-        .path = "/Users/guido/Library/Fonts/MinionPro-Regular.otf",
-        .callback = font_normal_loaded,
-        .buffer = SFETCH_RANGE(state.font_normal_data),
-    });
-    sfetch_send(&amp;(sfetch_request_t){
-        .path = "/Users/guido/Library/Fonts/Hack Regular Nerd Font Complete.ttf",
-        .callback = font_mono_loaded,
-        .buffer = SFETCH_RANGE(state.font_mono_data),
-    });
-}
+<span class="w">    </span><span class="n">sfetch_setup</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">sfetch_desc_t</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">num_channels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">num_lanes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">logger</span><span class="p">.</span><span class="n">func</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">slog_func</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">});</span><span class="w"></span>
+<span class="w">    </span><span class="n">sfetch_send</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">sfetch_request_t</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/Users/guido/Library/Fonts/MinionPro-Regular.otf&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">callback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">font_normal_loaded</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SFETCH_RANGE</span><span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">font_normal_data</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="p">});</span><span class="w"></span>
+<span class="w">    </span><span class="n">sfetch_send</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">sfetch_request_t</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/Users/guido/Library/Fonts/Hack Regular Nerd Font Complete.ttf&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">callback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">font_mono_loaded</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SFETCH_RANGE</span><span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">font_mono_data</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="p">});</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
 
-</pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgcee8680" class="outline-3">
-<h3 id="orgcee8680"><span class="section-number-3">2.2.</span> Load Fonts</h3>
-<div class="outline-text-3" id="text-2-2">
+<div id="outline-container-org97ef5cf" class="outline-4">
+<h4 id="org97ef5cf"><span class="section-number-4">0.2.2.</span> Load Fonts</h4>
+<div class="outline-text-4" id="text-0-2-2">
 <div class="org-src-container">
-<pre class="src src-c" id="org5ad74b3">  sfetch_setup(&amp;(sfetch_desc_t){
-      .num_channels = 1,
-      .num_lanes = 4,
-      .logger.func = slog_func,
-  });
-  sfetch_send(&amp;(sfetch_request_t){
-      .path = "/Users/guido/Library/Fonts/MinionPro-Regular.otf",
-      .callback = font_normal_loaded,
-      .buffer = SFETCH_RANGE(state.font_normal_data),
-  });
-  sfetch_send(&amp;(sfetch_request_t){
-      .path = "/Users/guido/Library/Fonts/Hack Regular Nerd Font Complete.ttf",
-      .callback = font_mono_loaded,
-      .buffer = SFETCH_RANGE(state.font_mono_data),
-  });
-</pre>
+<div class="highlight"><pre><span></span><span class="w">  </span><span class="n">sfetch_setup</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">sfetch_desc_t</span><span class="p">){</span><span class="w"></span>
+<span class="w">      </span><span class="p">.</span><span class="n">num_channels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="p">.</span><span class="n">num_lanes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="p">.</span><span class="n">logger</span><span class="p">.</span><span class="n">func</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">slog_func</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="p">});</span><span class="w"></span>
+<span class="w">  </span><span class="n">sfetch_send</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">sfetch_request_t</span><span class="p">){</span><span class="w"></span>
+<span class="w">      </span><span class="p">.</span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/Users/guido/Library/Fonts/MinionPro-Regular.otf&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="p">.</span><span class="n">callback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">font_normal_loaded</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="p">.</span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SFETCH_RANGE</span><span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">font_normal_data</span><span class="p">),</span><span class="w"></span>
+<span class="w">  </span><span class="p">});</span><span class="w"></span>
+<span class="w">  </span><span class="n">sfetch_send</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">sfetch_request_t</span><span class="p">){</span><span class="w"></span>
+<span class="w">      </span><span class="p">.</span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/Users/guido/Library/Fonts/Hack Regular Nerd Font Complete.ttf&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="p">.</span><span class="n">callback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">font_mono_loaded</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="p">.</span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SFETCH_RANGE</span><span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">font_mono_data</span><span class="p">),</span><span class="w"></span>
+<span class="w">  </span><span class="p">});</span><span class="w"></span>
+</pre></div>
+
 </div>
 
 
 <div class="org-src-container">
-<pre class="src src-c" id="orge60605a">void font_mono_loaded(const sfetch_response_t* response) {
-  printf("Loading mono\n");
-  if (response-&gt;fetched) {
-    printf("Loaded mono\n");
-    state.font_mono = fonsAddFontMem(state.fons, "mono", (void*)response-&gt;data.ptr, (int)response-&gt;data.size,  false);
-  }
-  else if (response-&gt;failed) {
-    printf("Loading mono failed: %d\n", response-&gt;error_code);
-  }
-}
+<div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">font_mono_loaded</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">sfetch_response_t</span><span class="o">*</span><span class="w"> </span><span class="n">response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Loading mono</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">response</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">fetched</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Loaded mono</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">state</span><span class="p">.</span><span class="n">font_mono</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fonsAddFontMem</span><span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">fons</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;mono&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">response</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">data</span><span class="p">.</span><span class="n">ptr</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">response</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">,</span><span class="w">  </span><span class="nb">false</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">response</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">failed</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Loading mono failed: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">response</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">error_code</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-void font_normal_loaded(const sfetch_response_t* response) {
-  printf("Loading normal\n");
-  if (response-&gt;fetched) {
-    printf("Loaded normal\n");
-    state.font_normal = fonsAddFontMem(state.fons, "sans", (void*)response-&gt;data.ptr, (int)response-&gt;data.size,  false);
-  }
-}
-</pre>
+<span class="kt">void</span><span class="w"> </span><span class="nf">font_normal_loaded</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">sfetch_response_t</span><span class="o">*</span><span class="w"> </span><span class="n">response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Loading normal</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">response</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">fetched</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Loaded normal</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">state</span><span class="p">.</span><span class="n">font_normal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fonsAddFontMem</span><span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">fons</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sans&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">response</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">data</span><span class="p">.</span><span class="n">ptr</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">response</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">,</span><span class="w">  </span><span class="nb">false</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
 </div>
 </div>
 </div>
 
 
-<div id="outline-container-orgdeb1819" class="outline-3">
-<h3 id="orgdeb1819"><span class="section-number-3">2.3.</span> Handle Event</h3>
-<div class="outline-text-3" id="text-2-3">
+<div id="outline-container-orgcbc1812" class="outline-4">
+<h4 id="orgcbc1812"><span class="section-number-4">0.2.3.</span> Handle Event</h4>
+<div class="outline-text-4" id="text-0-2-3">
 <p>
 This is what happens when something like a key is pressed or the
 window is re-sized.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="orgb2667a0">void handle_event(const sapp_event* event) {
-  // SAPP_EVENTTYPE_KEY_DOWN
-  // SAPP_EVENTTYPE_KEY_UP
-  if (event-&gt;type == SAPP_EVENTTYPE_CHAR) {
-    insert_char(event-&gt;char_code);
-    // bool key_repeat;
-    // uint32_t modifiers;
-  }
-}
-</pre>
+<div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">handle_event</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">sapp_event</span><span class="o">*</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// SAPP_EVENTTYPE_KEY_DOWN</span>
+<span class="w">  </span><span class="c1">// SAPP_EVENTTYPE_KEY_UP</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SAPP_EVENTTYPE_CHAR</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">insert_char</span><span class="p">(</span><span class="n">event</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">char_code</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// bool key_repeat;</span>
+<span class="w">    </span><span class="c1">// uint32_t modifiers;</span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
 </div>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org88405ca" class="outline-2">
-<h2 id="org88405ca"><span class="section-number-2">3.</span> Display</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-orgaa7b83e" class="outline-3">
+<h3 id="orgaa7b83e"><span class="section-number-3">0.3.</span> Display</h3>
+<div class="outline-text-3" id="text-0-3">
 </div>
-<div id="outline-container-org40ba986" class="outline-3">
-<h3 id="org40ba986"><span class="section-number-3">3.1.</span> Typeset Buffer</h3>
-<div class="outline-text-3" id="text-3-1">
+<div id="outline-container-orgd694c12" class="outline-4">
+<h4 id="orgd694c12"><span class="section-number-4">0.3.1.</span> Typeset Buffer</h4>
+<div class="outline-text-4" id="text-0-3-1">
 <p>
 This is where we translate the one-dimensional buffer into our
 two-dimensional display. In anticipation of the later addition of
@@ -618,13 +632,14 @@ by defining our Window type.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="orgaeeb81b">typedef struct Window {
-  u16_pair size_in_pixels;  // in pixels
-  u16_pair size_in_chars;   // in characters
-  u16_pair cursor_location; // in characters
-  
-} Window;
-</pre>
+<div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Window</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">u16_pair</span><span class="w"> </span><span class="n">size_in_pixels</span><span class="p">;</span><span class="w">  </span><span class="c1">// in pixels</span>
+<span class="w">  </span><span class="n">u16_pair</span><span class="w"> </span><span class="n">size_in_chars</span><span class="p">;</span><span class="w">   </span><span class="c1">// in characters</span>
+<span class="w">  </span><span class="n">u16_pair</span><span class="w"> </span><span class="n">cursor_location</span><span class="p">;</span><span class="w"> </span><span class="c1">// in characters</span>
+<span class="w">  </span>
+<span class="p">}</span><span class="w"> </span><span class="n">Window</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+
 </div>
 
 <p>
@@ -636,112 +651,125 @@ simpler than that. We just need to keep track of the locations in the
 buffer that represent the beginnings of lines.
 </p>
 
-<ul class="org-ul">
-<li class="off"><code>[&#xa0;]</code> TODO: It would be cool to be able to show the outside of the buffer struct sorta dimed giving the new code here some context</li>
-<li class="off"><code>[&#xa0;]</code> TODO: We should also allow you to click on a snippet and see it all merged together</li>
-</ul>
+<p>
+Add the new entries to the Buffer struct.
+</p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="org328c63d">u64 line_count;
-u64 * line_starts;
-</pre>
+<div class="highlight"><pre><span></span><span class="n">u64</span><span class="w"> </span><span class="n">line_count</span><span class="p">;</span><span class="w"></span>
+<span class="n">u64</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">line_starts</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+
 </div>
+
+<p>
+Now allocate that space during buffer creation.
+</p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="orgfbc91b2">b-&gt;line_starts = malloc(4096*sizeof(u64));
-</pre>
+<div class="highlight"><pre><span></span><span class="n">b</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">line_starts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mi">4096</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="n">u64</span><span class="p">));</span><span class="w"></span>
+</pre></div>
+
 </div>
+
+<p>
+Finally, we have a function for calculating the line starts for the
+entire buffer.
+</p>
 
 <div class="org-src-container">
-<pre class="src src-c" id="orgef84a22">for (u64 i = 0; i &lt; b-&gt;length; i++) {
-  
-}
-</pre>
+<div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">u64</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="w"> </span><span class="n">b</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
 </div>
 </div>
 </div>
 
 
 
-<div id="outline-container-org12da4f4" class="outline-3">
-<h3 id="org12da4f4"><span class="section-number-3">3.2.</span> Display State</h3>
-<div class="outline-text-3" id="text-3-2">
+<div id="outline-container-org75034d4" class="outline-4">
+<h4 id="org75034d4"><span class="section-number-4">0.3.2.</span> Display State</h4>
+<div class="outline-text-4" id="text-0-3-2">
 <div class="org-src-container">
-<pre class="src src-c" id="org112bcfa">typedef struct {
-  FONScontext* fons;
-  float dpi_scale;
-  int font_mono;
-  int font_normal;
-  uint8_t font_mono_data[16 * 256 * 1024];
-  uint8_t font_normal_data[256 * 1024];
-} state_t;
-static state_t state;
-</pre>
+<div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">FONScontext</span><span class="o">*</span><span class="w"> </span><span class="n">fons</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">dpi_scale</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">font_mono</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">font_normal</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">font_mono_data</span><span class="p">[</span><span class="mi">16</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">256</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">font_normal_data</span><span class="p">[</span><span class="mi">256</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">];</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">state_t</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="n">state_t</span><span class="w"> </span><span class="n">state</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgafe7ad7" class="outline-3">
-<h3 id="orgafe7ad7"><span class="section-number-3">3.3.</span> Draw Frame</h3>
-<div class="outline-text-3" id="text-3-3">
+<div id="outline-container-orgd142a63" class="outline-4">
+<h4 id="orgd142a63"><span class="section-number-4">0.3.3.</span> Draw Frame</h4>
+<div class="outline-text-4" id="text-0-3-3">
 <div class="org-src-container">
-<pre class="src src-c" id="org029bfd0">static void draw_frame(void) {
-  const char * str = (const char *)buffers[current_buffer_id].contents;
-  const float dpis = state.dpi_scale;
+<div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">draw_frame</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">buffers</span><span class="p">[</span><span class="n">current_buffer_id</span><span class="p">].</span><span class="n">contents</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">dpis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state</span><span class="p">.</span><span class="n">dpi_scale</span><span class="p">;</span><span class="w"></span>
 
-  // pump sokol_fetch message queues (GUIDO: why?)
-  sfetch_dowork();
+<span class="w">  </span><span class="c1">// pump sokol_fetch message queues (GUIDO: why?)</span>
+<span class="w">  </span><span class="n">sfetch_dowork</span><span class="p">();</span><span class="w"></span>
 
-  float sx, sy, dx, dy, lh = 0.0f;
-  uint32_t white = sfons_rgba(255, 255, 255, 255);
-  fonsClearState(state.fons);
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">sx</span><span class="p">,</span><span class="w"> </span><span class="n">sy</span><span class="p">,</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span><span class="p">,</span><span class="w"> </span><span class="n">lh</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">white</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sfons_rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">fonsClearState</span><span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">fons</span><span class="p">);</span><span class="w"></span>
 
-  sgl_defaults();
-  sgl_matrix_mode_projection();
-  sgl_ortho(0.0f, sapp_widthf(), sapp_heightf(), 0.0f, -1.0f, +1.0f);
+<span class="w">  </span><span class="n">sgl_defaults</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">sgl_matrix_mode_projection</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">sgl_ortho</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="n">sapp_widthf</span><span class="p">(),</span><span class="w"> </span><span class="n">sapp_heightf</span><span class="p">(),</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="o">+</span><span class="mf">1.0f</span><span class="p">);</span><span class="w"></span>
 
-  sx = 50*dpis; sy = 50*dpis;
-  dx = sx; dy = sy;
+<span class="w">  </span><span class="n">sx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="o">*</span><span class="n">dpis</span><span class="p">;</span><span class="w"> </span><span class="n">sy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="o">*</span><span class="n">dpis</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sx</span><span class="p">;</span><span class="w"> </span><span class="n">dy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sy</span><span class="p">;</span><span class="w"></span>
 
-  FONScontext* fs = state.fons;
-  fonsSetFont(fs, state.font_normal);
-  fonsSetSize(fs, 124.0f*dpis);
-  fonsVertMetrics(fs, NULL, NULL, &amp;lh);
-  dx = sx;
-  dy += lh;
-  fonsSetColor(fs, white);
-  dx = fonsDrawText(fs, dx, dy, str, NULL);
+<span class="w">  </span><span class="n">FONScontext</span><span class="o">*</span><span class="w"> </span><span class="n">fs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state</span><span class="p">.</span><span class="n">fons</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">fonsSetFont</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">.</span><span class="n">font_normal</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">fonsSetSize</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="w"> </span><span class="mf">124.0f</span><span class="o">*</span><span class="n">dpis</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">fonsVertMetrics</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">lh</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sx</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">dy</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">lh</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">fonsSetColor</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="w"> </span><span class="n">white</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fonsDrawText</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span><span class="p">,</span><span class="w"> </span><span class="n">str</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
 
-  // Draw status line
-  line(0, sapp_heightf()-100, sapp_widthf(), sapp_heightf()-100);
-  fonsSetFont(fs, state.font_mono);
-  fonsSetSize(fs, 48.0f*dpis);
-  dx = fonsDrawText(fs, 0, sapp_heightf()-24, "U:**-  *scratch*  0% (0,0)", NULL);
-  
-  // flush fontstash's font atlas to sokol-gfx texture
-  sfons_flush(fs);
+<span class="w">  </span><span class="c1">// Draw status line</span>
+<span class="w">  </span><span class="n">line</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">sapp_heightf</span><span class="p">()</span><span class="mi">-100</span><span class="p">,</span><span class="w"> </span><span class="n">sapp_widthf</span><span class="p">(),</span><span class="w"> </span><span class="n">sapp_heightf</span><span class="p">()</span><span class="mi">-100</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">fonsSetFont</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">.</span><span class="n">font_mono</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">fonsSetSize</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="w"> </span><span class="mf">48.0f</span><span class="o">*</span><span class="n">dpis</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fonsDrawText</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">sapp_heightf</span><span class="p">()</span><span class="mi">-24</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;U:**-  *scratch*  0% (0,0)&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span>
+<span class="w">  </span><span class="c1">// flush fontstash&#39;s font atlas to sokol-gfx texture</span>
+<span class="w">  </span><span class="n">sfons_flush</span><span class="p">(</span><span class="n">fs</span><span class="p">);</span><span class="w"></span>
 
-  // render pass
-  sg_begin_default_pass(&amp;(sg_pass_action){
-      .colors[0] = {
-        .action = SG_ACTION_CLEAR, .value = { 0.3f, 0.3f, 0.32f, 1.0f }
-      }
-    }, sapp_width(), sapp_height());
-  sgl_draw();
-  __dbgui_draw();
-  sg_end_pass();
-  sg_commit();
-}
-</pre>
+<span class="w">  </span><span class="c1">// render pass</span>
+<span class="w">  </span><span class="n">sg_begin_default_pass</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">sg_pass_action</span><span class="p">){</span><span class="w"></span>
+<span class="w">      </span><span class="p">.</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SG_ACTION_CLEAR</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mf">0.3f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.32f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"> </span><span class="n">sapp_width</span><span class="p">(),</span><span class="w"> </span><span class="n">sapp_height</span><span class="p">());</span><span class="w"></span>
+<span class="w">  </span><span class="n">sgl_draw</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">__dbgui_draw</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">sg_end_pass</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">sg_commit</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
 </div>
 </div>
 </div>
 </div>
 
 
-<div id="outline-container-orgb587aa5" class="outline-2">
-<h2 id="orgb587aa5"><span class="section-number-2">4.</span> TextMode vs Graphics</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-orgcca5b78" class="outline-3">
+<h3 id="orgcca5b78"><span class="section-number-3">0.4.</span> TextMode vs Graphics</h3>
+<div class="outline-text-3" id="text-0-4">
 <p>
 Using Sokol, to build:
 </p>
@@ -752,344 +780,346 @@ Using Sokol, to build:
 </div>
 
 <div class="org-src-container">
-<pre class="src src-c" id="org6f4962b">#include "sokol_app.h"
-#include "sokol_gfx.h"
-#include "sokol_fetch.h"
-#include "sokol_log.h"
-#include "sokol_glue.h"
-#define SOKOL_GL_IMPL
-#include "sokol_gl.h"
-#include &lt;stdio.h&gt;  // needed by fontstash's IO functions even though they are not used
-#define FONTSTASH_IMPLEMENTATION
-#if defined(_MSC_VER )
-#pragma warning(disable:4996)   // strncpy use in fontstash.h
-#endif
-#if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-function"
-#pragma GCC diagnostic ignored "-Wsign-conversion"
-#endif
-#include "fontstash/fontstash.h"
-#if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic pop
-#endif
-#define SOKOL_FONTSTASH_IMPL
-#include "sokol_fontstash.h"
-#include "dbgui/dbgui.h"
+<div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;sokol_app.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;sokol_gfx.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;sokol_fetch.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;sokol_log.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;sokol_glue.h&quot;</span><span class="cp"></span>
+<span class="cp">#define SOKOL_GL_IMPL</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;sokol_gl.h&quot;</span><span class="cp"></span>
+<span class="cp">#include &amp;lt;stdio.h&amp;gt;  </span><span class="c1">// needed by fontstash&#39;s IO functions even though they are not used</span>
+<span class="cp">#define FONTSTASH_IMPLEMENTATION</span>
+<span class="cp">#if defined(_MSC_VER )</span>
+<span class="cp">#pragma warning(disable:4996)   </span><span class="c1">// strncpy use in fontstash.h</span>
+<span class="cp">#endif</span>
+<span class="cp">#if defined(__GNUC__) || defined(__clang__)</span>
+<span class="cp">#pragma GCC diagnostic push</span>
+<span class="cp">#pragma GCC diagnostic ignored &quot;-Wunused-function&quot;</span>
+<span class="cp">#pragma GCC diagnostic ignored &quot;-Wsign-conversion&quot;</span>
+<span class="cp">#endif</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;fontstash/fontstash.h&quot;</span><span class="cp"></span>
+<span class="cp">#if defined(__GNUC__) || defined(__clang__)</span>
+<span class="cp">#pragma GCC diagnostic pop</span>
+<span class="cp">#endif</span>
+<span class="cp">#define SOKOL_FONTSTASH_IMPL</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;sokol_fontstash.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;dbgui/dbgui.h&quot;</span><span class="cp"></span>
 
-#include &lt;stdint.h&gt;
-#include &lt;string.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-typedef uint8_t u8;
-typedef uint16_t u16;
-typedef uint32_t u32;
-typedef int64_t i64;
-typedef uint64_t u64;
-typedef uint8_t Status;
-typedef uint16_t BufferId;
-//typedef char[8] Slug; // a short string (≤ 8 bytes)
+<span class="cp">#include &amp;lt;stdint.h&amp;gt;</span>
+<span class="cp">#include &amp;lt;string.h&amp;gt;</span>
+<span class="cp">#include &amp;lt;stdio.h&amp;gt;</span>
+<span class="cp">#include &amp;lt;stdlib.h&amp;gt;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">u8</span><span class="p">;</span><span class="w"></span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">u16</span><span class="p">;</span><span class="w"></span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32</span><span class="p">;</span><span class="w"></span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">i64</span><span class="p">;</span><span class="w"></span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">u64</span><span class="p">;</span><span class="w"></span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">Status</span><span class="p">;</span><span class="w"></span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">BufferId</span><span class="p">;</span><span class="w"></span>
+<span class="c1">//typedef char[8] Slug; // a short string (≤ 8 bytes)</span>
 
-enum {Success,Failure,NotUnicode};
+<span class="k">enum</span><span class="w"> </span><span class="p">{</span><span class="n">Success</span><span class="p">,</span><span class="n">Failure</span><span class="p">,</span><span class="n">NotUnicode</span><span class="p">};</span><span class="w"></span>
 
-typedef struct String { u8 len; u8 s[64]; } String;
-String str(const char * x) {
-  // TODO: assert string length
-  String y = {.len=sizeof(x)};
-  memcpy(y.s, x, y.len);
-  return y;
-}
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">String</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">u8</span><span class="w"> </span><span class="n">len</span><span class="p">;</span><span class="w"> </span><span class="n">u8</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="n">String</span><span class="p">;</span><span class="w"></span>
+<span class="n">String</span><span class="w"> </span><span class="nf">str</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// TODO: assert string length</span>
+<span class="w">  </span><span class="n">String</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{.</span><span class="n">len</span><span class="o">=</span><span class="k">sizeof</span><span class="p">(</span><span class="n">x</span><span class="p">)};</span><span class="w"></span>
+<span class="w">  </span><span class="n">memcpy</span><span class="p">(</span><span class="n">y</span><span class="p">.</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">.</span><span class="n">len</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">y</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-u8 to_utf8(u8 * buf, u32 ch)
-{
-    if (ch &lt;= 0x7F) {
-        buf[0] = ch;
-        return 1;
-    }
-    if (ch &lt;= 0x7FF) {
-        buf[0] = 0xC0 | (ch &gt;&gt; 6);            /* 110xxxxx */
-        buf[1] = 0x80 | (ch &amp; 0x3F);          /* 10xxxxxx */
-        return 2;
-    }
-    if (ch &lt;= 0xFFFF) {
-        buf[0] = 0xE0 | (ch &gt;&gt; 12);           /* 1110xxxx */
-        buf[1] = 0x80 | ((ch &gt;&gt; 6) &amp; 0x3F);   /* 10xxxxxx */
-        buf[2] = 0x80 | (ch &amp; 0x3F);          /* 10xxxxxx */
-        return 3;
-    }
-    if (ch &lt;= 0x10FFFF) {
-        buf[0] = 0xF0 | (ch &gt;&gt; 18);           /* 11110xxx */
-        buf[1] = 0x80 | ((ch &gt;&gt; 12) &amp; 0x3F);  /* 10xxxxxx */
-        buf[2] = 0x80 | ((ch &gt;&gt; 6) &amp; 0x3F);   /* 10xxxxxx */
-        buf[3] = 0x80 | (ch &amp; 0x3F);          /* 10xxxxxx */
-        return 4;
-    }
-    return 0;
-}
-typedef struct Buffer {
-  BufferId id;
-  String name;
-  u8* contents;
-  u64 length;
-  u64 point;
-  // Mark mark; no need to this quite yet
-  
-} Buffer;
+<span class="n">u8</span><span class="w"> </span><span class="nf">to_utf8</span><span class="p">(</span><span class="n">u8</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">ch</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">=</span><span class="w"> </span><span class="mh">0x7F</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ch</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">=</span><span class="w"> </span><span class="mh">0x7FF</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xC0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="w"> </span><span class="mi">6</span><span class="p">);</span><span class="w">            </span><span class="cm">/* 110xxxxx */</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x80</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="mh">0x3F</span><span class="p">);</span><span class="w">          </span><span class="cm">/* 10xxxxxx */</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">=</span><span class="w"> </span><span class="mh">0xFFFF</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xE0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="w"> </span><span class="mi">12</span><span class="p">);</span><span class="w">           </span><span class="cm">/* 1110xxxx */</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x80</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">((</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="mh">0x3F</span><span class="p">);</span><span class="w">   </span><span class="cm">/* 10xxxxxx */</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x80</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="mh">0x3F</span><span class="p">);</span><span class="w">          </span><span class="cm">/* 10xxxxxx */</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">=</span><span class="w"> </span><span class="mh">0x10FFFF</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xF0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="w"> </span><span class="mi">18</span><span class="p">);</span><span class="w">           </span><span class="cm">/* 11110xxx */</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x80</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">((</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="w"> </span><span class="mi">12</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="mh">0x3F</span><span class="p">);</span><span class="w">  </span><span class="cm">/* 10xxxxxx */</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x80</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">((</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="mh">0x3F</span><span class="p">);</span><span class="w">   </span><span class="cm">/* 10xxxxxx */</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x80</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="mh">0x3F</span><span class="p">);</span><span class="w">          </span><span class="cm">/* 10xxxxxx */</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Buffer</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">BufferId</span><span class="w"> </span><span class="n">id</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">u8</span><span class="o">*</span><span class="w"> </span><span class="n">contents</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">u64</span><span class="w"> </span><span class="n">length</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">u64</span><span class="w"> </span><span class="n">point</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// Mark mark; no need to this quite yet</span>
+<span class="w">  </span>
+<span class="p">}</span><span class="w"> </span><span class="n">Buffer</span><span class="p">;</span><span class="w"></span>
 
-Buffer buffers[64];
-u16 buffers_len;
-BufferId current_buffer_id;
-Status create_buffer(String name) {
-  for (int i = 0; i &lt; buffers_len; i++) {
-    if (memcmp(buffers[i].name.s, name.s, name.len) == 0) {
-      return Failure;
-    }
-  }
-  int i = buffers_len++;
-  Buffer * b = &amp;buffers[i];
-  b-&gt;id = i;
-  b-&gt;name = name;
-  b-&gt;contents = malloc(100);
-  return Success;
-}
+<span class="n">Buffer</span><span class="w"> </span><span class="n">buffers</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span><span class="w"></span>
+<span class="n">u16</span><span class="w"> </span><span class="n">buffers_len</span><span class="p">;</span><span class="w"></span>
+<span class="n">BufferId</span><span class="w"> </span><span class="n">current_buffer_id</span><span class="p">;</span><span class="w"></span>
+<span class="n">Status</span><span class="w"> </span><span class="nf">create_buffer</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="w"> </span><span class="n">buffers_len</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">memcmp</span><span class="p">(</span><span class="n">buffers</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">.</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">.</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">.</span><span class="n">len</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">Failure</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffers_len</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">Buffer</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">buffers</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="n">b</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">b</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">b</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">contents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">Success</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-Status set_current_buffer(String name) {
-  for (int i = 0; i &lt; buffers_len; i++) {
-    if (memcmp(buffers[i].name.s, name.s, name.len) == 0) {
-      current_buffer_id = i;
-    }
-  }
-  return Failure;
-}
-Status insert_char(u32 ch) {
-  u8 * b = buffers[current_buffer_id].contents;
-  u64 loc = buffers[current_buffer_id].point;
-  printf("Inserting %d to location %llu\n", ch, loc);
-  u8 enc[4];
-  u8 n = to_utf8(enc, ch);
-  if (n == 0) return NotUnicode;
-  memmove(b+loc+n, b+loc, n);
-  memcpy(b+loc, enc, n);
-  buffers[current_buffer_id].point++;
-  buffers[current_buffer_id].length += n;
-  return Success;
-}
-void handle_event(const sapp_event* event) {
-  // SAPP_EVENTTYPE_KEY_DOWN
-  // SAPP_EVENTTYPE_KEY_UP
-  if (event-&gt;type == SAPP_EVENTTYPE_CHAR) {
-    insert_char(event-&gt;char_code);
-    // bool key_repeat;
-    // uint32_t modifiers;
-  }
-}
-typedef struct {
-  FONScontext* fons;
-  float dpi_scale;
-  int font_mono;
-  int font_normal;
-  uint8_t font_mono_data[16 * 256 * 1024];
-  uint8_t font_normal_data[256 * 1024];
-} state_t;
-static state_t state;
-void font_mono_loaded(const sfetch_response_t* response) {
-  printf("Loading mono\n");
-  if (response-&gt;fetched) {
-    printf("Loaded mono\n");
-    state.font_mono = fonsAddFontMem(state.fons, "mono", (void*)response-&gt;data.ptr, (int)response-&gt;data.size,  false);
-  }
-  else if (response-&gt;failed) {
-    printf("Loading mono failed: %d\n", response-&gt;error_code);
-  }
-}
+<span class="n">Status</span><span class="w"> </span><span class="nf">set_current_buffer</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="w"> </span><span class="n">buffers_len</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">memcmp</span><span class="p">(</span><span class="n">buffers</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">.</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">.</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">.</span><span class="n">len</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">current_buffer_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">Failure</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="n">Status</span><span class="w"> </span><span class="nf">insert_char</span><span class="p">(</span><span class="n">u32</span><span class="w"> </span><span class="n">ch</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">u8</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffers</span><span class="p">[</span><span class="n">current_buffer_id</span><span class="p">].</span><span class="n">contents</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">u64</span><span class="w"> </span><span class="n">loc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffers</span><span class="p">[</span><span class="n">current_buffer_id</span><span class="p">].</span><span class="n">point</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Inserting %d to location %llu</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ch</span><span class="p">,</span><span class="w"> </span><span class="n">loc</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">u8</span><span class="w"> </span><span class="n">enc</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="n">u8</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">to_utf8</span><span class="p">(</span><span class="n">enc</span><span class="p">,</span><span class="w"> </span><span class="n">ch</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">NotUnicode</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">memmove</span><span class="p">(</span><span class="n">b</span><span class="o">+</span><span class="n">loc</span><span class="o">+</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="o">+</span><span class="n">loc</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">memcpy</span><span class="p">(</span><span class="n">b</span><span class="o">+</span><span class="n">loc</span><span class="p">,</span><span class="w"> </span><span class="n">enc</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">buffers</span><span class="p">[</span><span class="n">current_buffer_id</span><span class="p">].</span><span class="n">point</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">buffers</span><span class="p">[</span><span class="n">current_buffer_id</span><span class="p">].</span><span class="n">length</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">Success</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">handle_event</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">sapp_event</span><span class="o">*</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// SAPP_EVENTTYPE_KEY_DOWN</span>
+<span class="w">  </span><span class="c1">// SAPP_EVENTTYPE_KEY_UP</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SAPP_EVENTTYPE_CHAR</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">insert_char</span><span class="p">(</span><span class="n">event</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">char_code</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// bool key_repeat;</span>
+<span class="w">    </span><span class="c1">// uint32_t modifiers;</span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">FONScontext</span><span class="o">*</span><span class="w"> </span><span class="n">fons</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">dpi_scale</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">font_mono</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">font_normal</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">font_mono_data</span><span class="p">[</span><span class="mi">16</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">256</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">font_normal_data</span><span class="p">[</span><span class="mi">256</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">];</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">state_t</span><span class="p">;</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="n">state_t</span><span class="w"> </span><span class="n">state</span><span class="p">;</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">font_mono_loaded</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">sfetch_response_t</span><span class="o">*</span><span class="w"> </span><span class="n">response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Loading mono</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">response</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">fetched</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Loaded mono</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">state</span><span class="p">.</span><span class="n">font_mono</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fonsAddFontMem</span><span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">fons</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;mono&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">response</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">data</span><span class="p">.</span><span class="n">ptr</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">response</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">,</span><span class="w">  </span><span class="nb">false</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">response</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">failed</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Loading mono failed: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">response</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">error_code</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-void font_normal_loaded(const sfetch_response_t* response) {
-  printf("Loading normal\n");
-  if (response-&gt;fetched) {
-    printf("Loaded normal\n");
-    state.font_normal = fonsAddFontMem(state.fons, "sans", (void*)response-&gt;data.ptr, (int)response-&gt;data.size,  false);
-  }
-}
+<span class="kt">void</span><span class="w"> </span><span class="nf">font_normal_loaded</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">sfetch_response_t</span><span class="o">*</span><span class="w"> </span><span class="n">response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Loading normal</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">response</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">fetched</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Loaded normal</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">state</span><span class="p">.</span><span class="n">font_normal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fonsAddFontMem</span><span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">fons</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sans&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">response</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">data</span><span class="p">.</span><span class="n">ptr</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">response</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">,</span><span class="w">  </span><span class="nb">false</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-/* round to next power of 2 (see bit-twiddling-hacks) */
-int round_pow2(float v) {
-    uint32_t vi = ((uint32_t) v) - 1;
-    for (uint32_t i = 0; i &lt; 5; i++) {
-        vi |= (vi &gt;&gt; (1&lt;&lt;i));
-    }
-    return (int) (vi + 1);
-}
+<span class="cm">/* round to next power of 2 (see bit-twiddling-hacks) */</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">round_pow2</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">vi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="kt">uint32_t</span><span class="p">)</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">vi</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="p">(</span><span class="n">vi</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">i</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">vi</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-void line(float sx, float sy, float ex, float ey)
-{
-  sgl_begin_lines();
-  sgl_c4b(255, 255, 255, 128);
-  sgl_v2f(sx, sy);
-  sgl_v2f(ex, ey);
-  sgl_end();
-}
+<span class="kt">void</span><span class="w"> </span><span class="nf">line</span><span class="p">(</span><span class="kt">float</span><span class="w"> </span><span class="n">sx</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">sy</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">ex</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">ey</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">sgl_begin_lines</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">sgl_c4b</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">sgl_v2f</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span><span class="w"> </span><span class="n">sy</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">sgl_v2f</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span><span class="w"> </span><span class="n">ey</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">sgl_end</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-static void init(void) {
-  create_buffer(str("*scratch*"));
-  set_current_buffer(str("*scratch*"));
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">create_buffer</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="s">&quot;*scratch*&quot;</span><span class="p">));</span><span class="w"></span>
+<span class="w">  </span><span class="n">set_current_buffer</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="s">&quot;*scratch*&quot;</span><span class="p">));</span><span class="w"></span>
 
-  state.dpi_scale = sapp_dpi_scale();
-  sg_setup(&amp;(sg_desc){.context = sapp_sgcontext(), .logger.func = slog_func});
-  __dbgui_setup(sapp_sample_count());
-  sgl_setup(&amp;(sgl_desc_t){.logger.func = slog_func});
+<span class="w">  </span><span class="n">state</span><span class="p">.</span><span class="n">dpi_scale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sapp_dpi_scale</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">sg_setup</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">sg_desc</span><span class="p">){.</span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sapp_sgcontext</span><span class="p">(),</span><span class="w"> </span><span class="p">.</span><span class="n">logger</span><span class="p">.</span><span class="n">func</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">slog_func</span><span class="p">});</span><span class="w"></span>
+<span class="w">  </span><span class="n">__dbgui_setup</span><span class="p">(</span><span class="n">sapp_sample_count</span><span class="p">());</span><span class="w"></span>
+<span class="w">  </span><span class="n">sgl_setup</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">sgl_desc_t</span><span class="p">){.</span><span class="n">logger</span><span class="p">.</span><span class="n">func</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">slog_func</span><span class="p">});</span><span class="w"></span>
 
-  // make sure the fontstash atlas width/height is pow-2
-  const int atlas_dim = round_pow2(512.0f * state.dpi_scale);
-  state.fons = sfons_create(&amp;(sfons_desc_t){.width = atlas_dim, .height = atlas_dim});
-  state.font_mono = FONS_INVALID;
-  state.font_normal = FONS_INVALID;
+<span class="w">  </span><span class="c1">// make sure the fontstash atlas width/height is pow-2</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">atlas_dim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">round_pow2</span><span class="p">(</span><span class="mf">512.0f</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">state</span><span class="p">.</span><span class="n">dpi_scale</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">state</span><span class="p">.</span><span class="n">fons</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sfons_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">sfons_desc_t</span><span class="p">){.</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atlas_dim</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atlas_dim</span><span class="p">});</span><span class="w"></span>
+<span class="w">  </span><span class="n">state</span><span class="p">.</span><span class="n">font_mono</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FONS_INVALID</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">state</span><span class="p">.</span><span class="n">font_normal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FONS_INVALID</span><span class="p">;</span><span class="w"></span>
 
-    sfetch_setup(&amp;(sfetch_desc_t){
-        .num_channels = 1,
-        .num_lanes = 4,
-        .logger.func = slog_func,
-    });
-    sfetch_send(&amp;(sfetch_request_t){
-        .path = "/Users/guido/Library/Fonts/MinionPro-Regular.otf",
-        .callback = font_normal_loaded,
-        .buffer = SFETCH_RANGE(state.font_normal_data),
-    });
-    sfetch_send(&amp;(sfetch_request_t){
-        .path = "/Users/guido/Library/Fonts/Hack Regular Nerd Font Complete.ttf",
-        .callback = font_mono_loaded,
-        .buffer = SFETCH_RANGE(state.font_mono_data),
-    });
-}
+<span class="w">    </span><span class="n">sfetch_setup</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">sfetch_desc_t</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">num_channels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">num_lanes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">logger</span><span class="p">.</span><span class="n">func</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">slog_func</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">});</span><span class="w"></span>
+<span class="w">    </span><span class="n">sfetch_send</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">sfetch_request_t</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/Users/guido/Library/Fonts/MinionPro-Regular.otf&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">callback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">font_normal_loaded</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SFETCH_RANGE</span><span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">font_normal_data</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="p">});</span><span class="w"></span>
+<span class="w">    </span><span class="n">sfetch_send</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">sfetch_request_t</span><span class="p">){</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/Users/guido/Library/Fonts/Hack Regular Nerd Font Complete.ttf&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">callback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">font_mono_loaded</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SFETCH_RANGE</span><span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">font_mono_data</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="p">});</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-static void draw_frame(void) {
-  const char * str = (const char *)buffers[current_buffer_id].contents;
-  const float dpis = state.dpi_scale;
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">draw_frame</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">buffers</span><span class="p">[</span><span class="n">current_buffer_id</span><span class="p">].</span><span class="n">contents</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">dpis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state</span><span class="p">.</span><span class="n">dpi_scale</span><span class="p">;</span><span class="w"></span>
 
-  // pump sokol_fetch message queues (GUIDO: why?)
-  sfetch_dowork();
+<span class="w">  </span><span class="c1">// pump sokol_fetch message queues (GUIDO: why?)</span>
+<span class="w">  </span><span class="n">sfetch_dowork</span><span class="p">();</span><span class="w"></span>
 
-  float sx, sy, dx, dy, lh = 0.0f;
-  uint32_t white = sfons_rgba(255, 255, 255, 255);
-  fonsClearState(state.fons);
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">sx</span><span class="p">,</span><span class="w"> </span><span class="n">sy</span><span class="p">,</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span><span class="p">,</span><span class="w"> </span><span class="n">lh</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">white</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sfons_rgba</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="mi">255</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">fonsClearState</span><span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">fons</span><span class="p">);</span><span class="w"></span>
 
-  sgl_defaults();
-  sgl_matrix_mode_projection();
-  sgl_ortho(0.0f, sapp_widthf(), sapp_heightf(), 0.0f, -1.0f, +1.0f);
+<span class="w">  </span><span class="n">sgl_defaults</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">sgl_matrix_mode_projection</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">sgl_ortho</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="n">sapp_widthf</span><span class="p">(),</span><span class="w"> </span><span class="n">sapp_heightf</span><span class="p">(),</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">-1.0f</span><span class="p">,</span><span class="w"> </span><span class="o">+</span><span class="mf">1.0f</span><span class="p">);</span><span class="w"></span>
 
-  sx = 50*dpis; sy = 50*dpis;
-  dx = sx; dy = sy;
+<span class="w">  </span><span class="n">sx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="o">*</span><span class="n">dpis</span><span class="p">;</span><span class="w"> </span><span class="n">sy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="o">*</span><span class="n">dpis</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sx</span><span class="p">;</span><span class="w"> </span><span class="n">dy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sy</span><span class="p">;</span><span class="w"></span>
 
-  FONScontext* fs = state.fons;
-  fonsSetFont(fs, state.font_normal);
-  fonsSetSize(fs, 124.0f*dpis);
-  fonsVertMetrics(fs, NULL, NULL, &amp;lh);
-  dx = sx;
-  dy += lh;
-  fonsSetColor(fs, white);
-  dx = fonsDrawText(fs, dx, dy, str, NULL);
+<span class="w">  </span><span class="n">FONScontext</span><span class="o">*</span><span class="w"> </span><span class="n">fs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state</span><span class="p">.</span><span class="n">fons</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">fonsSetFont</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">.</span><span class="n">font_normal</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">fonsSetSize</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="w"> </span><span class="mf">124.0f</span><span class="o">*</span><span class="n">dpis</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">fonsVertMetrics</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">lh</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sx</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">dy</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">lh</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="n">fonsSetColor</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="w"> </span><span class="n">white</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fonsDrawText</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span><span class="p">,</span><span class="w"> </span><span class="n">str</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
 
-  // Draw status line
-  line(0, sapp_heightf()-100, sapp_widthf(), sapp_heightf()-100);
-  fonsSetFont(fs, state.font_mono);
-  fonsSetSize(fs, 48.0f*dpis);
-  dx = fonsDrawText(fs, 0, sapp_heightf()-24, "U:**-  *scratch*  0% (0,0)", NULL);
-  
-  // flush fontstash's font atlas to sokol-gfx texture
-  sfons_flush(fs);
+<span class="w">  </span><span class="c1">// Draw status line</span>
+<span class="w">  </span><span class="n">line</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">sapp_heightf</span><span class="p">()</span><span class="mi">-100</span><span class="p">,</span><span class="w"> </span><span class="n">sapp_widthf</span><span class="p">(),</span><span class="w"> </span><span class="n">sapp_heightf</span><span class="p">()</span><span class="mi">-100</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">fonsSetFont</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">.</span><span class="n">font_mono</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">fonsSetSize</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="w"> </span><span class="mf">48.0f</span><span class="o">*</span><span class="n">dpis</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fonsDrawText</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">sapp_heightf</span><span class="p">()</span><span class="mi">-24</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;U:**-  *scratch*  0% (0,0)&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span>
+<span class="w">  </span><span class="c1">// flush fontstash&#39;s font atlas to sokol-gfx texture</span>
+<span class="w">  </span><span class="n">sfons_flush</span><span class="p">(</span><span class="n">fs</span><span class="p">);</span><span class="w"></span>
 
-  // render pass
-  sg_begin_default_pass(&amp;(sg_pass_action){
-      .colors[0] = {
-        .action = SG_ACTION_CLEAR, .value = { 0.3f, 0.3f, 0.32f, 1.0f }
-      }
-    }, sapp_width(), sapp_height());
-  sgl_draw();
-  __dbgui_draw();
-  sg_end_pass();
-  sg_commit();
-}
+<span class="w">  </span><span class="c1">// render pass</span>
+<span class="w">  </span><span class="n">sg_begin_default_pass</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;(</span><span class="n">sg_pass_action</span><span class="p">){</span><span class="w"></span>
+<span class="w">      </span><span class="p">.</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="n">action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SG_ACTION_CLEAR</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mf">0.3f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3f</span><span class="p">,</span><span class="w"> </span><span class="mf">0.32f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"> </span><span class="n">sapp_width</span><span class="p">(),</span><span class="w"> </span><span class="n">sapp_height</span><span class="p">());</span><span class="w"></span>
+<span class="w">  </span><span class="n">sgl_draw</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">__dbgui_draw</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">sg_end_pass</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">sg_commit</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-void cleanup(void) {
-  __dbgui_shutdown();
-  sfetch_shutdown();
-  sfons_destroy(state.fons);
-  sgl_shutdown();
-  sg_shutdown();
-}
+<span class="kt">void</span><span class="w"> </span><span class="nf">cleanup</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">__dbgui_shutdown</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">sfetch_shutdown</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">sfons_destroy</span><span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">fons</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="n">sgl_shutdown</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="n">sg_shutdown</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-sapp_desc sokol_main(int argc, char* argv[]) {
-  (void)argc;
-  (void)argv;
-  return (sapp_desc) {
-    .init_cb = init,
-    .frame_cb = draw_frame,
-    .cleanup_cb = cleanup,
-    .event_cb = handle_event, // Or use .event_cb = __dbgui_event,
-    .width = 800,
-    .height = 600,
-    .high_dpi = true,
-    .gl_force_gles2 = true,
-    .window_title = "fontstash",
-    .icon.sokol_default = true,
-    .logger.func = slog_func,
-  };
-}
-</pre>
+<span class="n">sapp_desc</span><span class="w"> </span><span class="nf">sokol_main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">argv</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">argc</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">argv</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">sapp_desc</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">init_cb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">init</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">frame_cb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">draw_frame</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">cleanup_cb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cleanup</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">event_cb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">handle_event</span><span class="p">,</span><span class="w"> </span><span class="c1">// Or use .event_cb = __dbgui_event,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">800</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">600</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">high_dpi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">gl_force_gles2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">window_title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;fontstash&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">icon</span><span class="p">.</span><span class="n">sokol_default</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">logger</span><span class="p">.</span><span class="n">func</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">slog_func</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="p">};</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
 </div>
 </div>
 
-<div id="outline-container-orgfead18b" class="outline-3">
-<h3 id="orgfead18b"><span class="section-number-3">4.1.</span> Unicode Helpers</h3>
-<div class="outline-text-3" id="text-4-1">
+<div id="outline-container-org931c221" class="outline-4">
+<h4 id="org931c221"><span class="section-number-4">0.4.1.</span> Unicode Helpers</h4>
+<div class="outline-text-4" id="text-0-4-1">
 <div class="org-src-container">
-<pre class="src src-c" id="org373f76f">typedef struct String { u8 len; u8 s[64]; } String;
-String str(const char * x) {
-  // TODO: assert string length
-  String y = {.len=sizeof(x)};
-  memcpy(y.s, x, y.len);
-  return y;
-}
+<div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">String</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">u8</span><span class="w"> </span><span class="n">len</span><span class="p">;</span><span class="w"> </span><span class="n">u8</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="n">String</span><span class="p">;</span><span class="w"></span>
+<span class="n">String</span><span class="w"> </span><span class="nf">str</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// TODO: assert string length</span>
+<span class="w">  </span><span class="n">String</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{.</span><span class="n">len</span><span class="o">=</span><span class="k">sizeof</span><span class="p">(</span><span class="n">x</span><span class="p">)};</span><span class="w"></span>
+<span class="w">  </span><span class="n">memcpy</span><span class="p">(</span><span class="n">y</span><span class="p">.</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">.</span><span class="n">len</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">y</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-u8 to_utf8(u8 * buf, u32 ch)
-{
-    if (ch &lt;= 0x7F) {
-        buf[0] = ch;
-        return 1;
-    }
-    if (ch &lt;= 0x7FF) {
-        buf[0] = 0xC0 | (ch &gt;&gt; 6);            /* 110xxxxx */
-        buf[1] = 0x80 | (ch &amp; 0x3F);          /* 10xxxxxx */
-        return 2;
-    }
-    if (ch &lt;= 0xFFFF) {
-        buf[0] = 0xE0 | (ch &gt;&gt; 12);           /* 1110xxxx */
-        buf[1] = 0x80 | ((ch &gt;&gt; 6) &amp; 0x3F);   /* 10xxxxxx */
-        buf[2] = 0x80 | (ch &amp; 0x3F);          /* 10xxxxxx */
-        return 3;
-    }
-    if (ch &lt;= 0x10FFFF) {
-        buf[0] = 0xF0 | (ch &gt;&gt; 18);           /* 11110xxx */
-        buf[1] = 0x80 | ((ch &gt;&gt; 12) &amp; 0x3F);  /* 10xxxxxx */
-        buf[2] = 0x80 | ((ch &gt;&gt; 6) &amp; 0x3F);   /* 10xxxxxx */
-        buf[3] = 0x80 | (ch &amp; 0x3F);          /* 10xxxxxx */
-        return 4;
-    }
-    return 0;
-}
-</pre>
+<span class="n">u8</span><span class="w"> </span><span class="nf">to_utf8</span><span class="p">(</span><span class="n">u8</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">ch</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">=</span><span class="w"> </span><span class="mh">0x7F</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ch</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">=</span><span class="w"> </span><span class="mh">0x7FF</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xC0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="w"> </span><span class="mi">6</span><span class="p">);</span><span class="w">            </span><span class="cm">/* 110xxxxx */</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x80</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="mh">0x3F</span><span class="p">);</span><span class="w">          </span><span class="cm">/* 10xxxxxx */</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">=</span><span class="w"> </span><span class="mh">0xFFFF</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xE0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="w"> </span><span class="mi">12</span><span class="p">);</span><span class="w">           </span><span class="cm">/* 1110xxxx */</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x80</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">((</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="mh">0x3F</span><span class="p">);</span><span class="w">   </span><span class="cm">/* 10xxxxxx */</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x80</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="mh">0x3F</span><span class="p">);</span><span class="w">          </span><span class="cm">/* 10xxxxxx */</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">=</span><span class="w"> </span><span class="mh">0x10FFFF</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xF0</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="w"> </span><span class="mi">18</span><span class="p">);</span><span class="w">           </span><span class="cm">/* 11110xxx */</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x80</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">((</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="w"> </span><span class="mi">12</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="mh">0x3F</span><span class="p">);</span><span class="w">  </span><span class="cm">/* 10xxxxxx */</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x80</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">((</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="mh">0x3F</span><span class="p">);</span><span class="w">   </span><span class="cm">/* 10xxxxxx */</span><span class="w"></span>
+<span class="w">        </span><span class="n">buf</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x80</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">ch</span><span class="w"> </span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="w"> </span><span class="mh">0x3F</span><span class="p">);</span><span class="w">          </span><span class="cm">/* 10xxxxxx */</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+
 </div>
 </div>
 </div>
 </div>
 
 
-<div id="outline-container-orgc77a0b8" class="outline-2">
-<h2 id="orgc77a0b8"><span class="section-number-2">5.</span> Extensions</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-org8a508b9" class="outline-3">
+<h3 id="org8a508b9"><span class="section-number-3">0.5.</span> Extensions</h3>
+<div class="outline-text-3" id="text-0-5">
 </div>
-<div id="outline-container-org82d653e" class="outline-3">
-<h3 id="org82d653e"><span class="section-number-3">5.1.</span> Lisp Nodes</h3>
-<div class="outline-text-3" id="text-5-1">
+<div id="outline-container-org357060b" class="outline-4">
+<h4 id="org357060b"><span class="section-number-4">0.5.1.</span> Lisp Nodes</h4>
+<div class="outline-text-4" id="text-0-5-1">
 <p>
 The classic C implementation of a Lisp node is an implicit tagged
 union of the native word size where the lower 3 bits of a pointer tag
@@ -1136,9 +1166,9 @@ Cell cells[4096];
 </div>
 </div>
 
-<div id="outline-container-org597dd8c" class="outline-2">
-<h2 id="org597dd8c"><span class="section-number-2">6.</span> Stupid Ideas</h2>
-<div class="outline-text-2" id="text-6">
+<div id="outline-container-orga791990" class="outline-3">
+<h3 id="orga791990"><span class="section-number-3">0.6.</span> Stupid Ideas</h3>
+<div class="outline-text-3" id="text-0-6">
 <ul class="org-ul">
 <li>Maybe a slug should store 7 bit ascii chars and use the remaining
 bits for length?</li>
@@ -1149,19 +1179,97 @@ part of the block all at once.</li>
 </div>
 </div>
 
-<div id="outline-container-orgf6933cd" class="outline-2">
-<h2 id="orgf6933cd"><span class="section-number-2">7.</span> Questions</h2>
-<div class="outline-text-2" id="text-7">
+<div id="outline-container-org2488a2e" class="outline-3">
+<h3 id="org2488a2e"><span class="section-number-3">0.7.</span> Questions</h3>
+<div class="outline-text-3" id="text-0-7">
 <ul class="org-ul">
 <li>How many ms does it take to redisplay the whole display? Is it less
 than an incremental approach on a modern computer?</li>
 </ul>
 </div>
 </div>
+
+<div id="outline-container-org924267a" class="outline-2">
+<h2 id="org924267a"><span class="section-number-2">1.</span> Exporting</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org3936b51" class="outline-4">
+<h4 id="org3936b51"><span class="section-number-4">1.0.1.</span> Bailing wire and duct tape</h4>
+<div class="outline-text-4" id="text-1-0-1">
+<div class="org-src-container">
+<pre class="src src-python">import re
+html = open('third.html').read()
+
+from pygments import highlight
+from pygments.lexers import CLexer
+from pygments.formatters import HtmlFormatter
+
+highlight_c = lambda m: highlight(m.group(1), CLexer(), HtmlFormatter())
+r = re.compile(r'&lt;pre class="src src-c" id=".+?"&gt;(.+?)&lt;/pre&gt;', re.S)
+html = r.sub(highlight_c, html)
+open('third.html', 'w').write(html)
+</pre>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-orga644c5d" class="outline-4">
+<h4 id="orga644c5d"><span class="section-number-4">1.0.2.</span> Shit that doesn&rsquo;t work</h4>
+<div class="outline-text-4" id="text-1-0-2">
+<div class="org-src-container">
+<pre class="src src-elisp">;; Path for pygments or command name
+(defvar pygments-path "pygmentize")
+
+; pygmentize -l c -f html /tmp/a.c
+
+(defun pygments-org-html-code (code backend info)
+  "Ensure \" \" are properly handled in HTML export."
+  (when (org-export-derived-backend-p backend 'html)
+    (message "The src block's language: %s" (org-element-property :language code))
+    (shell-command-to-string (format "pygmentize -l c -f html %s"
+                                     (make-temp-file "foo" nil (org-element-property :language code) code)))))
+
+(defun pygments-org-html-code3 (code backend info)
+  "Ensure \" \" are properly handled in HTML export."
+  (when (org-export-derived-backend-p backend 'html)
+    (replace-regexp-in-string "return" "RETURN" code)))
+
+(defun pygments-org-html-code2 (code contents info)
+  ;; Generating tmp file path.
+  ;; Current date and time hash will ideally pass our needs.
+  (setq temp-source-file (format "/tmp/pygmentize-%s.txt"(md5 (current-time-string))))
+  ;; Writing block contents to the file.
+  (with-temp-file temp-source-file (insert (org-element-property :value code)))
+  ;; Exectuing the shell-command an reading an output
+  (shell-command-to-string (format "%s -l \"%s\" -f html %s"
+				   pygments-path
+				   (or (org-element-property :language code)
+				       "")
+				   temp-source-file)))
+
+;(org-export-define-derived-backend 'guido-html 'html
+;  :translate-alist '((src-block .  pygments-org-html-code)
+;		     (example-block . pygments-org-html-code)))
+
+(add-to-list 'org-export-filter-src-block-functions
+             'pygments-org-html-code)
+
+</pre>
+</div>
+
+<ul class="org-ul">
+<li class="off"><code>[&#xa0;]</code> TODO: It would be cool to be able to show the outside of the buffer struct sorta dimed giving the new code here some context</li>
+<li class="off"><code>[&#xa0;]</code> TODO: We should also allow you to click on a snippet and see it all merged together</li>
+</ul>
+</div>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Guido Bartolucci</p>
-<p class="date">Created: 2023-02-25 Sat 14:16</p>
+<p class="date">Created: 2023-02-26 Sun 18:19</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

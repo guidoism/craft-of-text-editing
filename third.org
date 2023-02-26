@@ -298,8 +298,7 @@ beginning of the buffer until our current location. Actually, it's
 simpler than that. We just need to keep track of the locations in the
 buffer that represent the beginnings of lines.
 
-- [ ] TODO: It would be cool to be able to show the outside of the buffer struct sorta dimed giving the new code here some context
-- [ ] TODO: We should also allow you to click on a snippet and see it all merged together
+Add the new entries to the Buffer struct.
 
 #+name: buffer_additions
 #+begin_src c
@@ -307,10 +306,15 @@ u64 line_count;
 u64 * line_starts;
 #+end_src
 
+Now allocate that space during buffer creation.
+
 #+name: create_buffer_additions
 #+begin_src c
 b->line_starts = malloc(4096*sizeof(u64));
 #+end_src
+
+Finally, we have a function for calculating the line starts for the
+entire buffer.
 
 #+name: calculate_line_starts
 #+begin_src c
@@ -587,3 +591,76 @@ Cell cells[4096];
 
 - How many ms does it take to redisplay the whole display? Is it less
   than an incremental approach on a modern computer?
+
+* Exporting
+
+*** Bailing wire and duct tape
+
+#+begin_src python :results output
+import re
+html = open('third.html').read()
+
+from pygments import highlight
+from pygments.lexers import CLexer
+from pygments.formatters import HtmlFormatter
+
+highlight_c = lambda m: highlight(m.group(1), CLexer(), HtmlFormatter())
+r = re.compile(r'<pre class="src src-c" id=".+?">(.+?)</pre>', re.S)
+html = r.sub(highlight_c, html)
+open('third.html', 'w').write(html)
+#+end_src
+
+#+RESULTS:
+
+
+
+
+*** Shit that doesn't work
+
+#+begin_src elisp
+;; Path for pygments or command name
+(defvar pygments-path "pygmentize")
+
+; pygmentize -l c -f html /tmp/a.c
+
+(defun pygments-org-html-code (code backend info)
+  "Ensure \" \" are properly handled in HTML export."
+  (when (org-export-derived-backend-p backend 'html)
+    (message "The src block's language: %s" (org-element-property :language code))
+    (shell-command-to-string (format "pygmentize -l c -f html %s"
+                                     (make-temp-file "foo" nil (org-element-property :language code) code)))))
+
+(defun pygments-org-html-code3 (code backend info)
+  "Ensure \" \" are properly handled in HTML export."
+  (when (org-export-derived-backend-p backend 'html)
+    (replace-regexp-in-string "return" "RETURN" code)))
+
+(defun pygments-org-html-code2 (code contents info)
+  ;; Generating tmp file path.
+  ;; Current date and time hash will ideally pass our needs.
+  (setq temp-source-file (format "/tmp/pygmentize-%s.txt"(md5 (current-time-string))))
+  ;; Writing block contents to the file.
+  (with-temp-file temp-source-file (insert (org-element-property :value code)))
+  ;; Exectuing the shell-command an reading an output
+  (shell-command-to-string (format "%s -l \"%s\" -f html %s"
+				   pygments-path
+				   (or (org-element-property :language code)
+				       "")
+				   temp-source-file)))
+
+;(org-export-define-derived-backend 'guido-html 'html
+;  :translate-alist '((src-block .  pygments-org-html-code)
+;		     (example-block . pygments-org-html-code)))
+
+(add-to-list 'org-export-filter-src-block-functions
+             'pygments-org-html-code)
+
+#+end_src
+
+#+RESULTS:
+| pygments-org-html-code |
+
+- [ ] TODO: It would be cool to be able to show the outside of the buffer struct sorta dimed giving the new code here some context
+- [ ] TODO: We should also allow you to click on a snippet and see it all merged together
+
+
