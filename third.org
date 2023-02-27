@@ -97,14 +97,14 @@ of memory that comes from malloc. We move everything after
 the insertion point with ~memmove~ during each edit.
 
 #+name: buffer_representation
-#+begin_src c
+#+begin_src c :noweb yes
 typedef struct Buffer {
   BufferId id;
   String name;
   u8* contents;
   u64 length;
   u64 point;
-  // Mark mark; no need to this quite yet
+  <<buffer_additions>>
   
 } Buffer;
 
@@ -116,7 +116,7 @@ BufferId current_buffer_id;
 *** Create a new buffer
 
 #+name: create_buffer
-#+begin_src c
+#+begin_src c :noweb yes
 Status create_buffer(String name) {
   for (int i = 0; i < buffers_len; i++) {
     if (memcmp(buffers[i].name.s, name.s, name.len) == 0) {
@@ -128,6 +128,7 @@ Status create_buffer(String name) {
   b->id = i;
   b->name = name;
   b->contents = malloc(100);
+  <<create_buffer_additions>>
   return Success;
 }
 
@@ -318,12 +319,14 @@ entire buffer.
 
 #+name: calculate_line_starts
 #+begin_src c
+printf("calculate_line_starts, length = %llu\n", b->length);
 for (u64 i = 0; i < b->length; i++) {
-  
+  if (b->contents[i] == '\n') {
+    b->line_starts[(b->line_count)++] = i+1;
+    printf("Start of line: %llu\n", i+1);
+  }
 }
 #+end_src
-
-
 
 *** Display State
 #+name: display_state
@@ -342,9 +345,13 @@ static state_t state;
 *** Draw Frame
 
 #+name: draw_frame
-#+begin_src c
+#+begin_src c :noweb yes
 static void draw_frame(void) {
-  const char * str = (const char *)buffers[current_buffer_id].contents;
+  Buffer * b = &buffers[current_buffer_id];
+  const char * str = (const char *)b->contents;
+
+  <<calculate_line_starts>>
+  
   const float dpis = state.dpi_scale;
 
   // pump sokol_fetch message queues (GUIDO: why?)
@@ -597,8 +604,8 @@ Cell cells[4096];
 *** Bailing wire and duct tape
 
 #+begin_src python :results output
-import re
-html = open('third.html').read()
+import re, html
+h = html.unescape(open('third.html').read())
 
 from pygments import highlight
 from pygments.lexers import CLexer
@@ -606,8 +613,8 @@ from pygments.formatters import HtmlFormatter
 
 highlight_c = lambda m: highlight(m.group(1), CLexer(), HtmlFormatter())
 r = re.compile(r'<pre class="src src-c" id=".+?">(.+?)</pre>', re.S)
-html = r.sub(highlight_c, html)
-open('third.html', 'w').write(html)
+h = r.sub(highlight_c, h)
+open('third.html', 'w').write(h)
 #+end_src
 
 #+RESULTS:
