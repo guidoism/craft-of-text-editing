@@ -319,7 +319,7 @@ entire buffer.
 
 #+name: calculate_line_starts
 #+begin_src c
-printf("calculate_line_starts, length = %llu\n", b->length);
+b->line_starts[(b->line_count)++] = 0;
 for (u64 i = 0; i < b->length; i++) {
   if (b->contents[i] == '\n') {
     b->line_starts[(b->line_count)++] = i+1;
